@@ -31,12 +31,19 @@ exports.accessToken = (req, res) => {
   const parsedQuery = querystring.parse(parsedUrl.query);
 
   if (parsedQuery.error) {
-    res.writeHead(400, { "Content-Type": "text/plain" });
-    res.end(`Authorization error: ${parsedQuery.error_description}`);
+    const json = {
+      message: `Authorization error: ${parsedQuery.error_description}`,
+    };
+
+    res.state(400);
+    res.setHeader("Content-Type", "text/plain");
+    res.end(JSON.stringify(json));
+    return;
   }
 
   if (!parsedQuery.code) {
     res.redirect(AUTHORIZATION_URL);
+    return;
   }
 
   const postData = {
@@ -50,12 +57,41 @@ exports.accessToken = (req, res) => {
   // Request for token from MCV
   axios
     .post(ACCESS_TOKEN_URL, postData)
-    .then((tokenData) => {
-      const token = tokenData.data;
+    .then((responseData) => {
+      const token = responseData.data; // { token_type, access_token, expires_in, refresh_token }
       req.session.token = token;
 
-      if (token)
-        res.redirect(`http://${process.env.FRONTEND_ADDRESS}/index.html`);
+      if (token) {
+        res.status(302);
+        res.location(`http://${process.env.FRONTEND_ADDRESS}/index.html`);
+        res.end();
+      }
     })
     .catch((err) => console.error(err));
+};
+
+/*
+  ==================== getUserInfo ====================
+ */
+exports.getUserInfo = (req, res) => {
+  if (!req.session.token) {
+    res.status(401);
+    res.setHeader("Content-Type", "text/plain");
+    res.end(`Login required!`);
+    return;
+  }
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${req.session.token.access_token}`,
+    },
+  };
+
+  axios
+    .get("https://www.mycourseville.com/api/v1/public/get/user/info", config)
+    .then((responseData) => {
+      const json = responseData.data;
+      res.end(JSON.stringify(json));
+    })
+    .catch((err) => console.log(err));
 };
