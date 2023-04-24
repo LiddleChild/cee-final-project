@@ -23,9 +23,9 @@ exports.getAcademicYear = () => {
 };
 
 /*
-  ==================== getCurrentCourses ====================
+  ==================== getSemesterCourses ====================
  */
-exports.getCurrentCourses = async (accessTokenConfig) => {
+exports.getSemesterCourses = async (accessTokenConfig) => {
   try {
     let responseData = await axios.get(
       `https://www.mycourseville.com/api/v1/public/get/user/courses?detail=1`,
@@ -36,18 +36,17 @@ exports.getCurrentCourses = async (accessTokenConfig) => {
     let courses = json.data.student;
     let courseFilter = exports.getAcademicYear();
 
-    courses = courses.filter(
+    // Filter for only this semester's courses
+    return courses.filter(
       (element) => element.year === courseFilter.year && element.semester === courseFilter.semester
     );
-
-    return courses;
   } catch (err) {
     console.error(err);
   }
 };
 
 /*
-  ==================== getCourseAssignments ====================
+  ==================== getCourseAssignmentsOnThisMonth ====================
  */
 exports.getCourseAssignmentsOnThisMonth = async (accessTokenConfig, courseId) => {
   try {
@@ -60,12 +59,38 @@ exports.getCourseAssignmentsOnThisMonth = async (accessTokenConfig, courseId) =>
     let m = new Date().getMonth();
     let assignments = json.data;
 
-    assignments = assignments.filter(
-      (element) => new Date(element.duetime * 1000).getMonth() === m
-    );
-
-    return assignments;
+    // Filter for only current month's assignment
+    return assignments.filter((element) => new Date(element.duetime * 1000).getMonth() === m);
   } catch (err) {
     console.error(err);
   }
+};
+
+/*
+  ==================== getAssignmentsOnThisMonth ====================
+ */
+exports.getAssignmentsOnThisMonth = async (accessTokenConfig) => {
+  let courses = await exports.getSemesterCourses(accessTokenConfig);
+
+  let calendar = {};
+  for (let c of courses) {
+    let courseId = c.cv_cid;
+    let assignments = await exports.getCourseAssignmentsOnThisMonth(accessTokenConfig, courseId);
+
+    for (let assign of assignments) {
+      let d = new Date(assign.duetime * 1000).getDate();
+
+      if (!calendar[d]) calendar[d] = [];
+      calendar[d].push({
+        course_title: c.title,
+        course_no: c.course_no,
+        course_icon: c.course_icon,
+
+        assignments_title: assign.title,
+        assignments_duetime: assign.duetime,
+      });
+    }
+  }
+
+  return calendar;
 };
