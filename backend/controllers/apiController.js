@@ -24,16 +24,7 @@ exports.getCalendar = async (req, res) => {
     },
   };
 
-  let courses = await calendarModel.getCurrentCourses(accessTokenConfig);
-
-  // let assignments = {};
-  // for (let i of courses) {
-  //   let courseId = i.cv_cid;
-  //   assignments[courseId] = {
-  //     ...i,
-  //     assignments: await calendarModel.getCourseAssignmentsOnThisMonth(accessTokenConfig, courseId),
-  //   };
-  // }
+  let courses = await calendarModel.getAssignmentsOnThisMonth(accessTokenConfig);
 
   res.end(JSON.stringify(courses));
 };
