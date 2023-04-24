@@ -8,12 +8,14 @@
 
   </head>
   <body>
-  </section>
-  <section class="section-center">
-      <button id="login" onclick=login()>Login</button>
-  </section>
-    <section class="section-center">
-      <button id="logout" onclick=logout()>Logout</button>
-  </section>
+    <div id="not_logged_in" style="display: none">
+      <button onclick="loginHandler()">Login</button>
+    </div>
+    <div id="logged_in" style="display: none">
+      <span id="name"></span>
+      <button onclick="logoutHandler()">Logout</button>
+      <button onclick="getCourseHandler()">Get courses</button>
+    </div>
   </body>
+  <script src="index.js"></script>
 </html>
