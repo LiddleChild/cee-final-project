@@ -27,26 +27,26 @@ function updateCal() {
   }
   monthHeader.innerHTML = monthLi[currentDate[1]][0] + " " + currentDate[3]
   addEmptyDays()
-  fetch("http://localhost:3000/api/get_calendar", {
-  method: "GET",
-  credentials: "include",
-})
-  .then((response) => response.json())
-  .then((json) => { 
-    console.log(json);
-    for(let i = 1; i <= monthLi[currentDate[1]][1]; i++){
-      var li = document.createElement("li")
-      li.appendChild(document.createTextNode(i))
-      if(json[i] != undefined) li.style.color = "red"
-      dayUl.appendChild(li)
+  
+  fetch(
+    `http://localhost:3000/api/get_calendar?month=${firstDayOfMonth.getMonth() + 1}&year=${firstDayOfMonth.getFullYear()}`, {
+      method: "GET",
+      credentials: "include",
     }
-  })
-  .catch((err) => {
-    console.error(err);     
-  });
-  
-  
+  )
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json);
+      for(let i = 1; i <= monthLi[currentDate[1]][1]; i++){
+        var li = document.createElement("li")
+        li.appendChild(document.createTextNode(i))
+        if(json[i] != undefined) li.style.color = "red"
+        dayUl.appendChild(li)
+      }
+    });
 }
+  
+  
 function addEmptyDays(){
   for(let i = 1; i < firstWeekday; i++ ){
     var empty = document.createElement("li")
