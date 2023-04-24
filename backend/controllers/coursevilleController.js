@@ -75,9 +75,13 @@ exports.accessToken = (req, res) => {
  */
 exports.getUserInfo = (req, res) => {
   if (!req.session.token) {
+    const json = {
+      message: `Login required!`,
+    };
+
     res.status(401);
     res.setHeader("Content-Type", "text/plain");
-    res.end(`Login required!`);
+    res.end(JSON.stringify(json));
     return;
   }
 
