@@ -3,6 +3,6 @@ const router = express.Router();
 
 const apiController = require("./../controllers/apiController");
 
-router.get("/", apiController.get);
+router.get("/getCalendar", apiController.getCalendar);
 
 module.exports = router;

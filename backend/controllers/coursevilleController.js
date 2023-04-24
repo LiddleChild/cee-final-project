@@ -74,6 +74,7 @@ exports.accessToken = (req, res) => {
   ==================== getUserInfo ====================
  */
 exports.getUserInfo = (req, res) => {
+  // Check for login session
   if (!req.session.token) {
     const json = {
       message: `Login required!`,
