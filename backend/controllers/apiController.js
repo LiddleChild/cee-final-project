@@ -1,5 +1,3 @@
-const axios = require("axios");
-
 const calendarModel = require("../models/calendarModel");
 
 /*
@@ -24,7 +22,11 @@ exports.getCalendar = async (req, res) => {
     },
   };
 
-  let courses = await calendarModel.getAssignmentsOnThisMonth(accessTokenConfig);
+  let date = new Date();
+  let month = parseInt(req.query.month) || date.getMonth() + 1;
+  let year = parseInt(req.query.year) || date.getFullYear();
+
+  let courses = await calendarModel.getAssignments(accessTokenConfig, month, year);
 
   res.end(JSON.stringify(courses));
 };

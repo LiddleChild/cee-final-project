@@ -3,20 +3,17 @@ const axios = require("axios");
 /*
   ==================== getAcamedicYear ====================
  */
-exports.getAcademicYear = () => {
-  let date = new Date();
-  let m = date.getMonth();
-
+exports.getAcademicYear = (m, y) => {
   // First semester
   if (m >= 8 && m <= 12)
     return {
-      year: date.getFullYear().toString(),
+      year: y.toString(),
       semester: 1,
     };
   // Second semester
   else if (m >= 1 && m <= 5)
     return {
-      year: (date.getFullYear() - 1).toString(),
+      year: (y - 1).toString(),
       semester: 2,
     };
   else return {};
@@ -25,7 +22,7 @@ exports.getAcademicYear = () => {
 /*
   ==================== getSemesterCourses ====================
  */
-exports.getSemesterCourses = async (accessTokenConfig) => {
+exports.getSemesterCourses = async (accessTokenConfig, month, year) => {
   try {
     let responseData = await axios.get(
       `https://www.mycourseville.com/api/v1/public/get/user/courses?detail=1`,
@@ -34,7 +31,7 @@ exports.getSemesterCourses = async (accessTokenConfig) => {
     const json = responseData.data;
 
     let courses = json.data.student;
-    let courseFilter = exports.getAcademicYear();
+    let courseFilter = exports.getAcademicYear(month, year);
 
     // Filter for only this semester's courses
     return courses.filter(
@@ -46,9 +43,9 @@ exports.getSemesterCourses = async (accessTokenConfig) => {
 };
 
 /*
-  ==================== getCourseAssignmentsOnThisMonth ====================
+  ==================== getCourseAssignmentsOnTheMonth ====================
  */
-exports.getCourseAssignmentsOnThisMonth = async (accessTokenConfig, courseId) => {
+exports.getCourseAssignmentsOnTheMonth = async (accessTokenConfig, courseId, month) => {
   try {
     let responseData = await axios.get(
       `https://www.mycourseville.com/api/v1/public/get/course/assignments?cv_cid=${courseId}&detail=1`,
@@ -56,26 +53,31 @@ exports.getCourseAssignmentsOnThisMonth = async (accessTokenConfig, courseId) =>
     );
     const json = responseData.data;
 
-    let m = new Date().getMonth();
     let assignments = json.data;
 
     // Filter for only current month's assignment
-    return assignments.filter((element) => new Date(element.duetime * 1000).getMonth() === m);
+    return assignments.filter(
+      (element) => new Date(element.duetime * 1000).getMonth() + 1 === month
+    );
   } catch (err) {
     console.error(err);
   }
 };
 
 /*
-  ==================== getAssignmentsOnThisMonth ====================
+  ==================== getAssignments ====================
  */
-exports.getAssignmentsOnThisMonth = async (accessTokenConfig) => {
-  let courses = await exports.getSemesterCourses(accessTokenConfig);
+exports.getAssignments = async (accessTokenConfig, month, year) => {
+  let courses = await exports.getSemesterCourses(accessTokenConfig, month, year);
 
   let calendar = {};
   for (let c of courses) {
     let courseId = c.cv_cid;
-    let assignments = await exports.getCourseAssignmentsOnThisMonth(accessTokenConfig, courseId);
+    let assignments = await exports.getCourseAssignmentsOnTheMonth(
+      accessTokenConfig,
+      courseId,
+      month
+    );
 
     for (let assign of assignments) {
       let d = new Date(assign.duetime * 1000).getDate();
