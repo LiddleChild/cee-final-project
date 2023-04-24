@@ -17,23 +17,43 @@ var firstWeekday = firstDayOfMonth.getDay()
 
 
 
+
 console.log(initialDate)
 
 function updateCal() { 
+
   while(dayUl.firstChild){
     dayUl.removeChild(dayUl.firstChild)
   }
   monthHeader.innerHTML = monthLi[currentDate[1]][0] + " " + currentDate[3]
-  for(let i = 1; i < firstWeekday; i++ ){
-    var li = document.createElement("li")
-    dayUl.appendChild(li)
-  }
-  for(let i = 1; i <= monthLi[currentDate[1]][1]; i++){
-    var li = document.createElement("li")
-    li.appendChild(document.createTextNode(i))
-    dayUl.appendChild(li)
-  }
+  addEmptyDays()
+  fetch("http://localhost:3000/api/get_calendar", {
+  method: "GET",
+  credentials: "include",
+})
+  .then((response) => response.json())
+  .then((json) => { 
+    console.log(json);
+    for(let i = 1; i <= monthLi[currentDate[1]][1]; i++){
+      var li = document.createElement("li")
+      li.appendChild(document.createTextNode(i))
+      if(json[i] != undefined) li.style.color = "red"
+      dayUl.appendChild(li)
+    }
+  })
+  .catch((err) => {
+    console.error(err);     
+  });
   
+  
+}
+function addEmptyDays(){
+  for(let i = 1; i < firstWeekday; i++ ){
+    var empty = document.createElement("li")
+    empty.style.borderStyle = "hidden"
+    empty.style.paddingRight = "5px"
+    dayUl.appendChild(empty)
+  }
 }
 
 function nextMonth(){
@@ -45,7 +65,6 @@ function nextMonth(){
 currentDate = firstDayOfMonth.toString().split(" ")
 firstWeekday = firstDayOfMonth.getDay()
 updateCal()
-console.log(currentDate)
 }
 
 function prevMonth(){
@@ -58,6 +77,7 @@ currentDate = firstDayOfMonth.toString().split(" ")
 firstWeekday = firstDayOfMonth.getDay()
 updateCal()
 }
+
 
 function toggleButton() {
     fetch("http://localhost:3000/courseville/get_user_info", {
@@ -98,3 +118,5 @@ function logout() {
 }
 
 updateCal()
+
+
