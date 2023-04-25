@@ -98,8 +98,9 @@ exports.getAssignments = async (accessTokenConfig, month, year) => {
         course_no: c.course_no,
         course_icon: c.course_icon,
 
-        assignments_title: assign.title,
-        assignments_duetime: assign.duetime,
+        assignment_id: assign.itemid,
+        assignment_title: assign.title,
+        assignment_duetime: assign.duetime,
 
         status: eventState[USER_ID][ASSIGNMENT_ID] || "NOT_DONE",
       });

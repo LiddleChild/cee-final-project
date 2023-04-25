@@ -1,5 +1,8 @@
+const coursevilleModel = require("../models/coursevilleModel");
 const calendarModel = require("../models/calendarModel");
 const dbModel = require("../models/dbModel");
+
+const authUtil = require("../utils/authUtil");
 
 /*
   ==================== calendar ====================
@@ -38,9 +41,25 @@ exports.getTable = async (req, res) => {
 /*
   ==================== postEventStatus ====================
  */
-exports.postEventStatus = async (req, res) => {};
+exports.postEventStatus = async (req, res) => {
+  const accessTokenConfig = authUtil.getAccessTokenConfig(req.session.token.access_token);
+  const userInfo = await coursevilleModel.getUserInfo(accessTokenConfig);
+  const user_id = userInfo.data.account.uid;
+  const { event_id, status } = req.body;
+
+  const response = await dbModel.addItem(user_id, event_id, status);
+  res.end(response);
+};
 
 /*
-  ==================== deleteEventStatus ====================
- */
-exports.deleteEventStatus = async (req, res) => {};
+==================== deleteEventStatus ====================
+*/
+exports.deleteEventStatus = async (req, res) => {
+  const accessTokenConfig = authUtil.getAccessTokenConfig(req.session.token.access_token);
+  const userInfo = await coursevilleModel.getUserInfo(accessTokenConfig);
+  const user_id = userInfo.data.account.uid;
+  const { event_id } = req.body;
+
+  const response = await dbModel.deleteItem(user_id, event_id);
+  res.end(response);
+};
