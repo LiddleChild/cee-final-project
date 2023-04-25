@@ -9,6 +9,7 @@ const AUTHORIZATION_URL = `https://www.mycourseville.com/api/oauth/authorize?res
 const ACCESS_TOKEN_URL = "https://www.mycourseville.com/api/oauth/access_token";
 
 const coursevilleModel = require("../models/coursevilleModel");
+const authUtil = require("../utils/authUtil");
 
 /*
   ==================== login ====================
@@ -75,7 +76,7 @@ exports.accessToken = (req, res) => {
 /*
   ==================== getUserInfo ====================
  */
-exports.getUserInfo = async (req, res) => {
+exports.getUserInfo = (req, res) => {
   // Check for login session
   if (!req.session.token) {
     const json = {
@@ -88,12 +89,10 @@ exports.getUserInfo = async (req, res) => {
     return;
   }
 
-  const accessTokenConfig = {
-    headers: {
-      Authorization: `Bearer ${req.session.token.access_token}`,
-    },
-  };
+  const accessTokenConfig = authUtil.getAccessTokenConfig(req.session.token.access_token);
 
-  const responseData = await coursevilleModel.getUserInfo(accessTokenConfig);
-  res.end(JSON.stringify(responseData));
+  coursevilleModel.getUserInfo(accessTokenConfig).then((responseData) => {
+    authUtil.userInfoCache;
+    res.end(JSON.stringify(responseData));
+  });
 };

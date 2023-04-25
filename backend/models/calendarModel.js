@@ -1,5 +1,10 @@
 const axios = require("axios");
 
+const dbModel = require("../models/dbModel");
+const coursevilleModel = require("../models/coursevilleModel");
+
+const authUtil = require("../utils/authUtil");
+
 /*
   ==================== getAcamedicYear ====================
  */
@@ -68,7 +73,11 @@ exports.getCourseAssignmentsOnTheMonth = async (accessTokenConfig, courseId, mon
   ==================== getAssignments ====================
  */
 exports.getAssignments = async (accessTokenConfig, month, year) => {
-  let courses = await exports.getSemesterCourses(accessTokenConfig, month, year);
+  const courses = await exports.getSemesterCourses(accessTokenConfig, month, year);
+  const eventState = await dbModel.getTable();
+  const userInfo = await coursevilleModel.getUserInfo(accessTokenConfig);
+
+  const USER_ID = userInfo.data.account.uid;
 
   let calendar = {};
   for (let c of courses) {
@@ -80,16 +89,19 @@ exports.getAssignments = async (accessTokenConfig, month, year) => {
     );
 
     for (let assign of assignments) {
-      let d = new Date(assign.duetime * 1000).getDate();
+      const ASSIGNMENT_ID = assign.itemid;
+      let dayOfMonth = new Date(assign.duetime * 1000).getDate();
 
-      if (!calendar[d]) calendar[d] = [];
-      calendar[d].push({
+      if (!calendar[dayOfMonth]) calendar[dayOfMonth] = [];
+      calendar[dayOfMonth].push({
         course_title: c.title,
         course_no: c.course_no,
         course_icon: c.course_icon,
 
         assignments_title: assign.title,
         assignments_duetime: assign.duetime,
+
+        status: eventState[USER_ID][ASSIGNMENT_ID] || "NOT_DONE",
       });
     }
   }

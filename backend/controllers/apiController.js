@@ -17,16 +17,11 @@ exports.getCalendar = async (req, res) => {
     return;
   }
 
-  const accessTokenConfig = {
-    headers: {
-      Authorization: `Bearer ${req.session.token.access_token}`,
-    },
-  };
-
   let date = new Date();
   let month = parseInt(req.query.month) || date.getMonth() + 1;
   let year = parseInt(req.query.year) || date.getFullYear();
 
+  const accessTokenConfig = authUtil.getAccessTokenConfig(req.session.token.access_token);
   let courses = await calendarModel.getAssignments(accessTokenConfig, month, year);
 
   res.end(JSON.stringify(courses));
@@ -39,3 +34,13 @@ exports.getTable = async (req, res) => {
   let response = await dbModel.getTable();
   res.end(JSON.stringify(response));
 };
+
+/*
+  ==================== postEventStatus ====================
+ */
+exports.postEventStatus = async (req, res) => {};
+
+/*
+  ==================== deleteEventStatus ====================
+ */
+exports.deleteEventStatus = async (req, res) => {};
