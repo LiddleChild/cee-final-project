@@ -1,5 +1,14 @@
-ul {list-style-type: none;}
-body {font-family: Verdana, sans-serif;}
+ul {
+  list-style-type: none;
+}
+
+body {
+  font-family: Verdana, sans-serif;
+}
+
+.calendar {
+  width: 65%;
+}
 
 #calendar{
     margin:0;
@@ -13,6 +22,7 @@ body {font-family: Verdana, sans-serif;}
   width: 700px;
   background: #1a5ce0;
   text-align: center;
+  border-radius: 15px 15px 0 0;
   
 }
 
@@ -43,6 +53,7 @@ body {font-family: Verdana, sans-serif;}
 
 /* Weekdays (Mon-Sun) */
 .weekdays {
+  width: 100%;
   margin: 0;
   padding: 10px 0;
   background-color:#ddd;
@@ -54,13 +65,14 @@ body {font-family: Verdana, sans-serif;}
   width: 13.4%;
   color: #666;
   text-align: center;
-  
-  
+  min-width: 13%;
+  justify-content: space-between;
 }
 
 /* Days (1-31) */
 .days {
-  padding:0px 0;
+  width: 100%;
+  padding: 10px 0;
   background: #eee;
   margin: 0;
   width: 100.2%;
@@ -73,8 +85,9 @@ body {font-family: Verdana, sans-serif;}
   list-style-type: none;
   display: inline-block;
   width: 14%;
+  min-width: 13%;
   text-align: center;
-  font-size:16px;
+  font-size: 16px;
   color: #777;
   border-style: solid;
   border-width: 0.5px;
@@ -119,4 +132,3 @@ h2{
 .month .next:hover {
   color: rgb(13, 12, 103);
 }
-
