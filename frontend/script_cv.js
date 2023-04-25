@@ -48,7 +48,7 @@ function updateCal() {
   
   
 function addEmptyDays(){
-  for(let i = 1; i < firstWeekday; i++ ){
+  for(let i = 0; i < firstWeekday; i++ ){
     var empty = document.createElement("li")
     empty.style.borderStyle = "hidden"
     empty.style.paddingRight = "5px"
