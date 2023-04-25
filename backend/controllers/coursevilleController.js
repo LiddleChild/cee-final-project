@@ -60,7 +60,7 @@ exports.accessToken = (req, res) => {
   // Request for token from MCV
   axios
     .post(ACCESS_TOKEN_URL, postData)
-    .then((responseData) => {
+    .then(async (responseData) => {
       const token = responseData.data; // { token_type, access_token, expires_in, refresh_token }
       req.session.token = token;
 
@@ -76,23 +76,7 @@ exports.accessToken = (req, res) => {
 /*
   ==================== getUserInfo ====================
  */
-exports.getUserInfo = (req, res) => {
-  // Check for login session
-  if (!req.session.token) {
-    const json = {
-      message: `Login required!`,
-    };
-
-    res.status(401);
-    res.setHeader("Content-Type", "text/plain");
-    res.end(JSON.stringify(json));
-    return;
-  }
-
-  const accessTokenConfig = authUtil.getAccessTokenConfig(req.session.token.access_token);
-
-  coursevilleModel.getUserInfo(accessTokenConfig).then((responseData) => {
-    authUtil.userInfoCache;
-    res.end(JSON.stringify(responseData));
-  });
+exports.getUserInfo = async (req, res, session) => {
+  const responseData = await coursevilleModel.getUserInfo(session);
+  res.end(JSON.stringify(responseData));
 };

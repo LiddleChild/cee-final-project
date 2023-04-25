@@ -2,9 +2,6 @@ const axios = require("axios");
 
 const dbModel = require("../models/dbModel");
 const coursevilleModel = require("../models/coursevilleModel");
-
-const authUtil = require("../utils/authUtil");
-
 /*
   ==================== getAcamedicYear ====================
  */
@@ -27,11 +24,11 @@ exports.getAcademicYear = (m, y) => {
 /*
   ==================== getSemesterCourses ====================
  */
-exports.getSemesterCourses = async (accessTokenConfig, month, year) => {
+exports.getSemesterCourses = async (session, month, year) => {
   try {
     let responseData = await axios.get(
       `https://www.mycourseville.com/api/v1/public/get/user/courses?detail=1`,
-      accessTokenConfig
+      session.accessTokenConfig
     );
     const json = responseData.data;
 
@@ -50,11 +47,11 @@ exports.getSemesterCourses = async (accessTokenConfig, month, year) => {
 /*
   ==================== getCourseAssignmentsOnTheMonth ====================
  */
-exports.getCourseAssignmentsOnTheMonth = async (accessTokenConfig, courseId, month) => {
+exports.getCourseAssignmentsOnTheMonth = async (session, courseId, month) => {
   try {
     let responseData = await axios.get(
       `https://www.mycourseville.com/api/v1/public/get/course/assignments?cv_cid=${courseId}&detail=1`,
-      accessTokenConfig
+      session.accessTokenConfig
     );
     const json = responseData.data;
 
@@ -72,21 +69,17 @@ exports.getCourseAssignmentsOnTheMonth = async (accessTokenConfig, courseId, mon
 /*
   ==================== getAssignments ====================
  */
-exports.getAssignments = async (accessTokenConfig, month, year) => {
-  const courses = await exports.getSemesterCourses(accessTokenConfig, month, year);
+exports.getAssignments = async (session, month, year) => {
+  const courses = await exports.getSemesterCourses(session, month, year);
   const eventState = await dbModel.getTable();
-  const userInfo = await coursevilleModel.getUserInfo(accessTokenConfig);
+  const userInfo = await coursevilleModel.getUserInfo(session);
 
   const USER_ID = userInfo.data.account.uid;
 
   let calendar = {};
   for (let c of courses) {
     let courseId = c.cv_cid;
-    let assignments = await exports.getCourseAssignmentsOnTheMonth(
-      accessTokenConfig,
-      courseId,
-      month
-    );
+    let assignments = await exports.getCourseAssignmentsOnTheMonth(session, courseId, month);
 
     for (let assign of assignments) {
       const ASSIGNMENT_ID = assign.itemid;
