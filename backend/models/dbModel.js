@@ -15,16 +15,8 @@ exports.getTable = async () => {
     };
 
     const responseData = await client.send(new ScanCommand(params));
-    let items = {};
 
-    for (let i of responseData.Items) {
-      let { user_id, event_id, status } = i;
-
-      if (!items[user_id]) items[user_id] = {};
-      items[user_id][event_id] = status;
-    }
-
-    return items;
+    return responseData.Items;
   } catch (err) {
     console.error(err);
     return {};
