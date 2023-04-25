@@ -1,27 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-        <title>MyCalendarVille</title>
-        <link rel="stylesheet" href="style.css"></link>
-        <script src="script_cv.js" defer></script>
 
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <title>MyCalendarVille</title>
+  <link rel="stylesheet" href="style.css">
+  </link>
+  <script src="script_cv.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
   <section class="section-center">
-      <button id="login" onclick=login()>Login</button>
+    <button id="login" onclick=login()>Login</button>
   </section>
-    <section class="section-center">
-      <button id="logout" onclick=logout()>Logout</button>
+  <section class="section-center">
+    <button id="logout" onclick=logout()>Logout</button>
   </section>
-  <div class="month" >
+  <div class="month">
     <ul>
-      <li class="prev"><button onclick=prevMonth()>&#10094</button></li>
-      <li class="next" ><button onclick=nextMonth()>&#10095</button></li>
+      <!-- <li class="prev" ><button onclick=prevMonth()>&#10094</button></li> -->
+      <li class="prev">
+        <div class="fa fa-angle-left prev" onclick=prevMonth()></div>
+      </li>
+      <li class="next">
+        <div class="fa fa-angle-right next" onclick=nextMonth()></div>
+      </li>
       <li id="monthyear">August 2021</li>
     </ul>
   </div>
-  
+
   <ul class="weekdays">
     <li>Mon</li>
     <li>Tue</li>
@@ -31,9 +41,10 @@
     <li>Sat</li>
     <li>Sun</li>
   </ul>
-  
+
   <ul class="days" id="dayUl">
-    
+
   </ul>
-  </body>
+</body>
+
 </html>
