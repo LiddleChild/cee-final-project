@@ -1,4 +1,5 @@
 const calendarModel = require("../models/calendarModel");
+const dbModel = require("../models/dbModel");
 
 /*
   ==================== calendar ====================
@@ -29,4 +30,12 @@ exports.getCalendar = async (req, res) => {
   let courses = await calendarModel.getAssignments(accessTokenConfig, month, year);
 
   res.end(JSON.stringify(courses));
+};
+
+/*
+  ==================== getTable ====================
+ */
+exports.getTable = async (req, res) => {
+  let response = await dbModel.getTable();
+  res.end(JSON.stringify(response));
 };
