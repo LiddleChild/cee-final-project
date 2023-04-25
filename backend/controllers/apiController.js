@@ -26,9 +26,9 @@ exports.getTable = async (req, res) => {
 };
 
 /*
-  ==================== postEventStatus ====================
+  ==================== postEvent ====================
  */
-exports.postEventStatus = async (req, res, session) => {
+exports.postEvent = async (req, res, session) => {
   const userInfo = await coursevilleModel.getUserInfo(session);
   const user_id = userInfo.data.account.uid;
   const { event_id, status } = req.body;
@@ -38,9 +38,14 @@ exports.postEventStatus = async (req, res, session) => {
 };
 
 /*
-==================== deleteEventStatus ====================
+  ==================== postCreateEvent ====================
+ */
+exports.postCreateEvent = async (req, res, session) => {};
+
+/*
+==================== deleteEvent ====================
 */
-exports.deleteEventStatus = async (req, res, session) => {
+exports.deleteEvent = async (req, res, session) => {
   const userInfo = await coursevilleModel.getUserInfo(session);
   const user_id = userInfo.data.account.uid;
   const { event_id } = req.body;
