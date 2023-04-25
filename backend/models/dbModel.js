@@ -8,13 +8,6 @@ const client = new DynamoDBClient({ regions: process.env.AWS_REGION });
 /*
   ==================== getTable ====================
  */
-const getId = (event_id, user_id) => {
-  return `${event_id}-${user_id}`;
-};
-
-/*
-  ==================== getTable ====================
- */
 exports.getTable = async () => {
   try {
     const params = {
@@ -32,12 +25,13 @@ exports.getTable = async () => {
 /*
   ==================== addItem ====================
  */
-exports.addItem = async (event_id, user_id, status) => {
+exports.addItem = async (user_id, event_id, status) => {
   try {
     const params = {
       TableName: process.env.STATUS_TABLE_NAME,
       Item: {
-        id: getId(event_id, user_id),
+        user_id,
+        event_id,
         status,
       },
     };
@@ -52,12 +46,13 @@ exports.addItem = async (event_id, user_id, status) => {
 /*
   ==================== deleteItem ====================
  */
-exports.deleteItem = async (event_id, user_id) => {
+exports.deleteItem = async (user_id, event_id) => {
   try {
     const params = {
       TableName: process.env.STATUS_TABLE_NAME,
       Key: {
-        id: getId(event_id, user_id),
+        user_id,
+        event_id,
       },
     };
 
