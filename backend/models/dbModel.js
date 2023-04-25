@@ -27,7 +27,7 @@ exports.getTable = async () => {
     return items;
   } catch (err) {
     console.error(err);
-    return undefined;
+    return {};
   }
 };
 

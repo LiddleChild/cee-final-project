@@ -95,7 +95,10 @@ exports.getAssignments = async (session, month, year) => {
         assignment_title: assign.title,
         assignment_duetime: assign.duetime,
 
-        status: eventState[USER_ID][ASSIGNMENT_ID] || "NOT_DONE",
+        status:
+          eventState[USER_ID] && eventState[USER_ID][ASSIGNMENT_ID]
+            ? eventState[USER_ID][ASSIGNMENT_ID]
+            : "NOT_DONE",
       });
     }
   }
