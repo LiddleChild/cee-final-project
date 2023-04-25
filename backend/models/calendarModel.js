@@ -71,14 +71,8 @@ exports.getCourseAssignmentsOnTheMonth = async (session, courseId, month) => {
  */
 exports.getAssignments = async (session, month, year) => {
   const courses = await exports.getSemesterCourses(session, month, year);
-  const userInfo = await coursevilleModel.getUserInfo(session);
   const eventState = await dbModel.getTable();
-
-  let state = {};
-  for (let i of eventState) {
-    let { user_id, event_id, status } = i;
-    state[`${user_id}-${event_id}`] = status;
-  }
+  const userInfo = await coursevilleModel.getUserInfo(session);
 
   const USER_ID = userInfo.data.account.uid;
 
@@ -101,7 +95,10 @@ exports.getAssignments = async (session, month, year) => {
         assignment_title: assign.title,
         assignment_duetime: assign.duetime,
 
-        status: eventState[`${USER_ID}-${ASSIGNMENT_ID}`] || "NOT_DONE",
+        status:
+          eventState[USER_ID] && eventState[USER_ID][ASSIGNMENT_ID]
+            ? eventState[USER_ID][ASSIGNMENT_ID]
+            : "NOT_DONE",
       });
     }
   }
