@@ -1,12 +1,22 @@
-ul {list-style-type: none;}
-body {font-family: Verdana, sans-serif;}
+ul {
+  list-style-type: none;
+}
+
+body {
+  font-family: Verdana, sans-serif;
+}
+
+.calendar {
+  width: 65%;
+}
 
 /* Month header */
 .month {
-  padding: 70px 1px;
+  padding: 50px 0px;
   width: 100%;
   background: #1a5ce0;
   text-align: center;
+  border-radius: 15px 15px 0 0;
 }
 
 /* Month list */
@@ -36,31 +46,34 @@ body {font-family: Verdana, sans-serif;}
 
 /* Weekdays (Mon-Sun) */
 .weekdays {
+  width: 100%;
   margin: 0;
   padding: 10px 0;
-  background-color:#ddd;
+  background-color: #ddd;
 }
 
 .weekdays li {
   display: inline-block;
-  width: 13.6%;
+  min-width: 13%;
   color: #666;
   text-align: center;
+  justify-content: space-between;
 }
 
 /* Days (1-31) */
 .days {
+  width: 100%;
   padding: 10px 0;
   background: #eee;
   margin: 0;
 }
 
 .days li {
+  min-width: 13%;
   list-style-type: none;
   display: inline-block;
-  width: 13.6%;
   text-align: center;
-  font-size:16px;
+  font-size: 16px;
   color: #777;
   border-style: ridge;
   padding-top: 25px;
@@ -72,4 +85,9 @@ body {font-family: Verdana, sans-serif;}
   padding: 5px;
   background: #1abc9c;
   color: white !important
+}
+
+.month .prev:hover,
+.month .next:hover {
+  color: rgb(13, 12, 103);
 }
