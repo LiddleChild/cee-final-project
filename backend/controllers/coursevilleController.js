@@ -8,6 +8,8 @@ const REDIRECT_URI = `http://${process.env.BACKEND_ADDRESS}:${process.env.PORT}/
 const AUTHORIZATION_URL = `https://www.mycourseville.com/api/oauth/authorize?response_type=code&client_id=${process.env.CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
 const ACCESS_TOKEN_URL = "https://www.mycourseville.com/api/oauth/access_token";
 
+const coursevilleModel = require("../models/coursevilleModel");
+
 /*
   ==================== login ====================
  */
@@ -73,7 +75,7 @@ exports.accessToken = (req, res) => {
 /*
   ==================== getUserInfo ====================
  */
-exports.getUserInfo = (req, res) => {
+exports.getUserInfo = async (req, res) => {
   // Check for login session
   if (!req.session.token) {
     const json = {
@@ -86,17 +88,12 @@ exports.getUserInfo = (req, res) => {
     return;
   }
 
-  const config = {
+  const accessTokenConfig = {
     headers: {
       Authorization: `Bearer ${req.session.token.access_token}`,
     },
   };
 
-  axios
-    .get("https://www.mycourseville.com/api/v1/public/get/user/info", config)
-    .then((responseData) => {
-      const json = responseData.data;
-      res.end(JSON.stringify(json));
-    })
-    .catch((err) => console.log(err));
+  const responseData = await coursevilleModel.getUserInfo(accessTokenConfig);
+  res.end(JSON.stringify(responseData));
 };
