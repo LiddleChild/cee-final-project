@@ -9,49 +9,95 @@ let dayUl = document.getElementById("dayUl")
 var userInfo = undefined;
 //----------------------Date---------------------------
 let d = new Date();
-let initialDate = d.toString().split(" ")
-var firstDayOfMonth = new Date(monthLi[initialDate[1]][0] + " 1, " + initialDate[3] + " 00:00:00")
+let chosenDate = d.toString().split(" ")
+var firstDayOfMonth = new Date(monthLi[chosenDate[1]][0] + " 1, " + chosenDate[3] + " 00:00:00")
 let currentDate = firstDayOfMonth.toString().split(" ")
 var firstWeekday = firstDayOfMonth.getDay()
 //-----------------------------------------------------
+var calendar;
 
+getCalendar()
+console.log(firstWeekday)
 
-
-
-console.log(initialDate)
-
-function updateCal() { 
-
-  while(dayUl.firstChild){
-    dayUl.removeChild(dayUl.firstChild)
-  }
-  monthHeader.innerHTML = monthLi[currentDate[1]][0] + " " + currentDate[3]
-  addEmptyDays()
-  
+function getCalendar(){
   fetch(
     `http://localhost:3000/api/get_calendar?month=${firstDayOfMonth.getMonth() + 1}&year=${firstDayOfMonth.getFullYear()}`, {
       method: "GET",
       credentials: "include",
     }
   )
-    .then((response) => response.json())
-    .then((json) => {
-      console.log(json);
-      for(let i = 1; i <= monthLi[currentDate[1]][1]; i++){
-        var li = document.createElement("li")
-        li.appendChild(document.createTextNode(i))
-        if(json[i] != undefined) li.style.color = "red"
-        dayUl.appendChild(li)
+    .then(res => res.json())
+    .then(data => {
+      calendar = data
+      
+    })
+    .then(() =>{
+      console.log(calendar)
+    })
+     
+}
+
+function updateSidebar(){
+  
+  console.log(chosenDate[2])
+  document.getElementsByClassName("date")[0].innerHTML = chosenDate[2] + " " + chosenDate[1] + " " + chosenDate[3]
+  var itemList = document.getElementsByClassName("items")[0]
+      while(itemList.firstChild) itemList.removeChild(itemList.firstChild)
+      var chosenAssignmentList = []
+
+      if(chosenDate[2] in calendar) {
+        chosenAssignmentList = calendar[chosenDate[2]]
+        for(let i = 0; i < chosenAssignmentList.length; i++){
+          var item = document.createElement("li")
+          if((i > 0 && chosenAssignmentList[i]["course_no"] != chosenAssignmentList[i - 1]["course_no"]) || i == 0){
+            var subject = document.createElement("h2")
+            subject.innerHTML = chosenAssignmentList[i]["course_title"]
+            console.log(subject)
+            itemList.appendChild(subject)
+          }
+          var dueDate = new Date(chosenAssignmentList[i]["assignment_duetime"]*1000);
+          item.innerHTML = dueDate.toTimeString().split(" ")[0] + ": " + chosenAssignmentList[i]["assignment_title"] 
+          itemList.appendChild(item)
       }
-    });
+
+      }
+      else{
+        var none = document.createElement("li")
+        none.innerHTML = "Nothing to do today!"
+        itemList.appendChild(none)
+      }
+  
+
+}
+async function updateCal() { 
+  getCalendar()
+  const res = await fetch(`http://localhost:3000/api/get_calendar?month=${firstDayOfMonth.getMonth() + 1}&year=${firstDayOfMonth.getFullYear()}`)
+  while(dayUl.firstChild){
+    dayUl.removeChild(dayUl.firstChild)
+  }
+  monthHeader.innerHTML = monthLi[currentDate[1]][0] + " " + currentDate[3]
+  
+  addEmptyDays()
+  
+  for(let i = 1; i <= monthLi[currentDate[1]][1]; i++){
+    var li = document.createElement("li")
+    li.appendChild(document.createTextNode(i))
+    if(calendar[i] != undefined) li.style.color = "red"
+    li.onclick = function() {chosenDate[2] = i; updateSidebar()}
+    dayUl.appendChild(li)
+    
+  }
+  updateSidebar()
 }
   
   
 function addEmptyDays(){
-  for(let i = 0; i < firstWeekday; i++ ){
+  if(firstWeekday == 0) firstWeekday = 7;
+  for(let i = 1; i < firstWeekday; i++ ){
     var empty = document.createElement("li")
     empty.style.borderStyle = "hidden"
-    empty.style.paddingRight = "5px"
+    empty.style.paddingRight = "1.6px"
+    empty.style.borderWidth = "0.5px"
     dayUl.appendChild(empty)
   }
 }
@@ -64,6 +110,7 @@ function nextMonth(){
 }
 currentDate = firstDayOfMonth.toString().split(" ")
 firstWeekday = firstDayOfMonth.getDay()
+chosenDate = currentDate
 updateCal()
 }
 
@@ -75,6 +122,7 @@ function prevMonth(){
 }
 currentDate = firstDayOfMonth.toString().split(" ")
 firstWeekday = firstDayOfMonth.getDay()
+chosenDate = currentDate
 updateCal()
 }
 

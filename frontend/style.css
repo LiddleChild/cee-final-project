@@ -10,13 +10,20 @@ body {
   width: 65%;
 }
 
+#calendar{
+    margin:0;
+    position: absolute;
+    left: 52%
+}
+
 /* Month header */
 .month {
-  padding: 50px 0px;
-  width: 100%;
+  padding: 70px 1px;
+  width: 700px;
   background: #1a5ce0;
   text-align: center;
   border-radius: 15px 15px 0 0;
+  
 }
 
 /* Month list */
@@ -49,14 +56,16 @@ body {
   width: 100%;
   margin: 0;
   padding: 10px 0;
-  background-color: #ddd;
+  background-color:#ddd;
+  width: 100.2%;
 }
 
 .weekdays li {
   display: inline-block;
-  min-width: 13%;
+  width: 13.4%;
   color: #666;
   text-align: center;
+  min-width: 13%;
   justify-content: space-between;
 }
 
@@ -66,25 +75,57 @@ body {
   padding: 10px 0;
   background: #eee;
   margin: 0;
+  width: 100.2%;
+
+  
 }
 
 .days li {
-  min-width: 13%;
+  margin: 0;
   list-style-type: none;
   display: inline-block;
+  width: 14%;
+  min-width: 13%;
   text-align: center;
   font-size: 16px;
   color: #777;
-  border-style: ridge;
-  padding-top: 25px;
-  padding-bottom: 25px;
+  border-style: solid;
+  border-width: 0.5px;
+  padding-top: 35px;
+  padding-bottom: 35px;
+  
 }
 
 /* Highlight the "current" day */
 .days li .active {
   padding: 5px;
   background: #1abc9c;
-  color: white !important
+  color: white !important;
+  position: absolute;
+  
+}
+.sidebar {
+    text-align: left;
+    border: solid;
+    max-width:40%;
+    min-width: 40%;
+    margin-left: 55px;
+    position: absolute;
+    padding-right: 5px;
+}
+.date{
+    margin-left: 20px;
+}
+.items li{
+    font-size: 14px ;
+}
+h1 {
+
+    font-size: 22px;
+}
+h2{
+    font-size: 16px;
+    padding-top: 20px;
 }
 
 .month .prev:hover,
