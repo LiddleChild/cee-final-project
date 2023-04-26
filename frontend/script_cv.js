@@ -110,7 +110,7 @@ async function updateCal() {
   for (let i = 1; i <= monthLi[currentDate[1]][1]; i++) {
     var li = document.createElement("li");
     li.appendChild(document.createTextNode(i));
-    if (calendar[i] != undefined) li.style.color = "red";
+    if (calendar[i] != undefined) li.setAttribute("class", "active"); //highlight day with assignments
     li.onclick = function () {
       chosenDate[2] = i;
       updateSidebar();
@@ -121,12 +121,17 @@ async function updateCal() {
 }
 
 function addEmptyDays() {
-  if (firstWeekday == 0) firstWeekday = 7;
-  for (let i = 1; i < firstWeekday; i++) {
+  prevMonth = new Date(
+    firstDayOfMonth.getFullYear(),
+    firstDayOfMonth.getMonth() - 1,
+    1
+  );
+  prevMonth = monthLi[prevMonth.toString().split(" ")[1]][1];
+  console.log(prevMonth);
+  for (let i = prevMonth - firstWeekday + 1; i <= prevMonth; i++) {
     var empty = document.createElement("li");
-    empty.style.borderStyle = "hidden";
-    empty.style.paddingRight = "1.6px";
-    empty.style.borderWidth = "0.5px";
+    empty.appendChild(document.createTextNode(i));
+    empty.style.color = "gray";
     dayUl.appendChild(empty);
   }
 }
