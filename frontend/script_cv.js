@@ -92,6 +92,14 @@ function updateSidebar() {
     none.innerHTML = "Nothing to do today!";
     itemList.appendChild(none);
   }
+  var addButton = createAddButton();
+  itemList.appendChild(addButton);
+}
+function createAddButton() {
+  var addButton = document.createElement("button");
+  addButton.appendChild(document.createTextNode("+"));
+  addButton.setAttribute("class", "addButton");
+  return addButton;
 }
 async function updateCal() {
   getCalendar();
@@ -121,14 +129,14 @@ async function updateCal() {
 }
 
 function addEmptyDays() {
-  prevMonth = new Date(
+  previousMonth = new Date(
     firstDayOfMonth.getFullYear(),
     firstDayOfMonth.getMonth() - 1,
     1
   );
-  prevMonth = monthLi[prevMonth.toString().split(" ")[1]][1];
-  console.log(prevMonth);
-  for (let i = prevMonth - firstWeekday + 1; i <= prevMonth; i++) {
+  previousMonth = monthLi[previousMonth.toString().split(" ")[1]][1];
+  console.log(previousMonth);
+  for (let i = previousMonth - firstWeekday + 1; i <= previousMonth - 1; i++) {
     var empty = document.createElement("li");
     empty.appendChild(document.createTextNode(i));
     empty.style.color = "gray";
