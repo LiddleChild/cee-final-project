@@ -119,7 +119,11 @@ async function updateCal() {
       chosenDate[2] = i;
       if (document.querySelector(".chosen"))
         document.querySelector(".chosen").classList.remove("chosen");
-      e.target.classList.add("chosen");
+      if (e.target.tagName === "SPAN") {
+        e.target.closest("div").classList.add("chosen")
+      } else {
+        e.target.classList.add("chosen");
+      }
       updateSidebar();
     };
     dayUl.appendChild(li);
