@@ -2,7 +2,7 @@ const coursevilleModel = require("../models/coursevilleModel");
 const calendarModel = require("../models/calendarModel");
 const dbModel = require("../models/dbModel");
 
-const authUtil = require("../utils/authUtil");
+const { v4: uuidv4 } = require("uuid");
 
 /*
   ==================== calendar ====================
@@ -33,14 +33,28 @@ exports.postEvent = async (req, res, session) => {
   const user_id = userInfo.data.account.uid;
   const { event_id, status } = req.body;
 
-  const response = await dbModel.addItem(user_id, event_id, status);
+  const response = await dbModel.addItem(user_id, event_id, { status });
   res.end(response);
 };
 
 /*
   ==================== postCreateEvent ====================
  */
-exports.postCreateEvent = async (req, res, session) => {};
+exports.postCreateEvent = async (req, res, session) => {
+  const userInfo = await coursevilleModel.getUserInfo(session);
+  const user_id = userInfo.data.account.uid;
+  const { course_title, assignment_title, assignment_duetime } = req.body;
+
+  const response = await dbModel.addItem(user_id, uuidv4(), {
+    custom: {
+      course_title,
+      assignment_title,
+      assignment_duetime,
+    },
+    status: "NOT_DONE",
+  });
+  res.end(response);
+};
 
 /*
 ==================== deleteEvent ====================

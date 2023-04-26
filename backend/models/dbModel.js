@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { PutCommand, DeleteCommand, ScanCommand } = require("@aws-sdk/lib-dynamodb");
+const { response } = require("express");
 
 const client = new DynamoDBClient({ regions: process.env.AWS_REGION });
 
@@ -18,10 +19,10 @@ exports.getTable = async () => {
     let items = {};
 
     for (let i of responseData.Items) {
-      let { user_id, event_id, status } = i;
+      let { user_id, event_id, data } = i;
 
       if (!items[user_id]) items[user_id] = {};
-      items[user_id][event_id] = status;
+      items[user_id][event_id] = JSON.parse(data);
     }
 
     return items;
@@ -34,14 +35,14 @@ exports.getTable = async () => {
 /*
   ==================== addItem ====================
  */
-exports.addItem = async (user_id, event_id, status) => {
+exports.addItem = async (user_id, event_id, data) => {
   try {
     const params = {
       TableName: process.env.STATUS_TABLE_NAME,
       Item: {
         user_id,
         event_id,
-        status,
+        data: JSON.stringify(data),
       },
     };
 

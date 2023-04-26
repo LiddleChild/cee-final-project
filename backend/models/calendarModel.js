@@ -71,10 +71,23 @@ exports.getCourseAssignmentsOnTheMonth = async (session, courseId, month) => {
  */
 exports.getAssignments = async (session, month, year) => {
   const courses = await exports.getSemesterCourses(session, month, year);
-  const eventState = await dbModel.getTable();
+  const eventData = await dbModel.getTable();
   const userInfo = await coursevilleModel.getUserInfo(session);
 
   const USER_ID = userInfo.data.account.uid;
+
+  for (let event of Object.entries(eventData)) {
+    if (event.custom) {
+      calendar[dayOfMonth].push({
+        course_title: event.custom.title,
+
+        assignment_title: event.custom.title,
+        assignment_duetime: event.custom.duetime,
+
+        status: event.status,
+      });
+    }
+  }
 
   let calendar = {};
   for (let c of courses) {
@@ -96,8 +109,8 @@ exports.getAssignments = async (session, month, year) => {
         assignment_duetime: assign.duetime,
 
         status:
-          eventState[USER_ID] && eventState[USER_ID][ASSIGNMENT_ID]
-            ? eventState[USER_ID][ASSIGNMENT_ID]
+          eventData[USER_ID] && eventData[USER_ID][ASSIGNMENT_ID]
+            ? eventData[USER_ID][ASSIGNMENT_ID].status
             : "NOT_DONE",
       });
     }
