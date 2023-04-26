@@ -136,7 +136,7 @@ function addEmptyDays() {
   );
   previousMonth = monthLi[previousMonth.toString().split(" ")[1]][1];
   console.log(previousMonth);
-  for (let i = previousMonth - firstWeekday + 1; i <= previousMonth - 1; i++) {
+  for (let i = previousMonth - firstWeekday + 1; i <= previousMonth; i++) {
     var empty = document.createElement("li");
     empty.appendChild(document.createTextNode(i));
     empty.style.color = "gray";
