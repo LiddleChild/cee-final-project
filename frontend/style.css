@@ -132,6 +132,10 @@ body {
 
   
 }
+/* Highlight chosen day */
+.days li.chosen{
+  background: #d56587;
+}
 .sidebar {
     text-align: left;
     max-width:40%;

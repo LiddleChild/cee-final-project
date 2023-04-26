@@ -119,8 +119,10 @@ async function updateCal() {
     var li = document.createElement("li");
     li.appendChild(document.createTextNode(i));
     if (calendar[i] != undefined) li.setAttribute("class", "active"); //highlight day with assignments
-    li.onclick = function () {
+    li.onclick = function (e) {
       chosenDate[2] = i;
+      if(document.querySelector(".chosen")) document.querySelector(".chosen").classList.remove("chosen");
+      e.target.classList.add("chosen")
       updateSidebar();
     };
     dayUl.appendChild(li);
