@@ -125,6 +125,7 @@ async function updateCal() {
     };
     dayUl.appendChild(li);
   }
+  addNextMonthDays();
   updateSidebar();
 }
 
@@ -141,6 +142,22 @@ function addEmptyDays() {
     empty.appendChild(document.createTextNode(i));
     empty.style.color = "gray";
     dayUl.appendChild(empty);
+  }
+}
+function addNextMonthDays() {
+  var lastDay = new Date(
+    firstDayOfMonth.getFullYear(),
+    firstDayOfMonth.getMonth() + 1,
+    0
+  );
+  lastDay = lastDay.getDay() + 1;
+  console.log(lastDay);
+
+  for (let i = 1; i <= 7 - lastDay; i++) {
+    var day = document.createElement("li");
+    day.appendChild(document.createTextNode(i));
+    day.style.color = "gray";
+    dayUl.appendChild(day);
   }
 }
 
