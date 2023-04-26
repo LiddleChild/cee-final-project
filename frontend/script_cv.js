@@ -25,9 +25,7 @@ var userInfo = undefined;
 //----------------------Date---------------------------
 let d = new Date();
 let chosenDate = d.toString().split(" ");
-var firstDayOfMonth = new Date(
-  monthLi[chosenDate[1]][0] + " 1, " + chosenDate[3] + " 00:00:00"
-);
+var firstDayOfMonth = new Date(monthLi[chosenDate[1]][0] + " 1, " + chosenDate[3] + " 00:00:00");
 let currentDate = firstDayOfMonth.toString().split(" ");
 var firstWeekday = firstDayOfMonth.getDay();
 //-----------------------------------------------------
@@ -66,11 +64,10 @@ function updateSidebar() {
   if (chosenDate[2] in calendar) {
     chosenAssignmentList = calendar[chosenDate[2]];
     for (let i = 0; i < chosenAssignmentList.length; i++) {
-      var item = document.createElement("li");
+      var item = document.createElement("div");
       if (
         (i > 0 &&
-          chosenAssignmentList[i]["course_no"] !=
-            chosenAssignmentList[i - 1]["course_no"]) ||
+          chosenAssignmentList[i]["course_no"] != chosenAssignmentList[i - 1]["course_no"]) ||
         i == 0
       ) {
         var subject = document.createElement("h2");
@@ -78,17 +75,13 @@ function updateSidebar() {
         console.log(subject);
         itemList.appendChild(subject);
       }
-      var dueDate = new Date(
-        chosenAssignmentList[i]["assignment_duetime"] * 1000
-      );
+      var dueDate = new Date(chosenAssignmentList[i]["assignment_duetime"] * 1000);
       item.innerHTML =
-        dueDate.toTimeString().split(" ")[0] +
-        ": " +
-        chosenAssignmentList[i]["assignment_title"];
+        dueDate.toTimeString().split(" ")[0] + ": " + chosenAssignmentList[i]["assignment_title"];
       itemList.appendChild(item);
     }
   } else {
-    var none = document.createElement("li");
+    var none = document.createElement("div");
     none.innerHTML = "Nothing to do today!";
     itemList.appendChild(none);
   }
@@ -116,11 +109,17 @@ async function updateCal() {
   addEmptyDays();
 
   for (let i = 1; i <= monthLi[currentDate[1]][1]; i++) {
-    var li = document.createElement("li");
-    li.appendChild(document.createTextNode(i));
-    if (calendar[i] != undefined) li.setAttribute("class", "active"); //highlight day with assignments
-    li.onclick = function () {
+    var li = document.createElement("div");
+    let text = document.createElement("span");
+    text.innerText = i;
+    li.appendChild(text);
+    // if (calendar[i] != undefined) li.setAttribute("class", "active"); //highlight day with assignments
+    li.setAttribute("class", `active ${calendar[i] ? "pinned" : ""}`);
+    li.onclick = function (e) {
       chosenDate[2] = i;
+      if (document.querySelector(".chosen"))
+        document.querySelector(".chosen").classList.remove("chosen");
+      e.target.classList.add("chosen");
       updateSidebar();
     };
     dayUl.appendChild(li);
@@ -130,33 +129,25 @@ async function updateCal() {
 }
 
 function addEmptyDays() {
-  previousMonth = new Date(
-    firstDayOfMonth.getFullYear(),
-    firstDayOfMonth.getMonth() - 1,
-    1
-  );
+  previousMonth = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() - 1, 1);
   previousMonth = monthLi[previousMonth.toString().split(" ")[1]][1];
   console.log(previousMonth);
   for (let i = previousMonth - firstWeekday + 1; i <= previousMonth; i++) {
-    var empty = document.createElement("li");
+    var empty = document.createElement("div");
     empty.appendChild(document.createTextNode(i));
-    empty.style.color = "gray";
+    empty.style.color = "#ccc";
     dayUl.appendChild(empty);
   }
 }
 function addNextMonthDays() {
-  var lastDay = new Date(
-    firstDayOfMonth.getFullYear(),
-    firstDayOfMonth.getMonth() + 1,
-    0
-  );
+  var lastDay = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 0);
   lastDay = lastDay.getDay() + 1;
   console.log(lastDay);
 
   for (let i = 1; i <= 7 - lastDay; i++) {
-    var day = document.createElement("li");
+    var day = document.createElement("div");
     day.appendChild(document.createTextNode(i));
-    day.style.color = "gray";
+    day.style.color = "#ccc";
     dayUl.appendChild(day);
   }
 }
@@ -165,11 +156,7 @@ function nextMonth() {
   if (firstDayOfMonth.getMonth() == 11) {
     firstDayOfMonth = new Date(firstDayOfMonth.getFullYear() + 1, 0, 1);
   } else {
-    firstDayOfMonth = new Date(
-      firstDayOfMonth.getFullYear(),
-      firstDayOfMonth.getMonth() + 1,
-      1
-    );
+    firstDayOfMonth = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 1);
   }
   currentDate = firstDayOfMonth.toString().split(" ");
   firstWeekday = firstDayOfMonth.getDay();
@@ -181,11 +168,7 @@ function prevMonth() {
   if (firstDayOfMonth.getMonth() == 1) {
     firstDayOfMonth = new Date(firstDayOfMonth.getFullYear() - 1, 12, 1);
   } else {
-    firstDayOfMonth = new Date(
-      firstDayOfMonth.getFullYear(),
-      firstDayOfMonth.getMonth() - 1,
-      1
-    );
+    firstDayOfMonth = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() - 1, 1);
   }
   currentDate = firstDayOfMonth.toString().split(" ");
   firstWeekday = firstDayOfMonth.getDay();

@@ -1,0 +1,155 @@
+.calendar {
+  margin: 0;
+  position: relative;
+
+  width: 600px;
+  height: max-content;
+}
+
+/* Month header */
+.month {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+
+  text-align: center;
+  width: 100%;
+
+  padding: 70px 0px;
+  border-radius: 15px 15px 0 0;
+
+  background: #aec3ff;
+}
+
+/* Month list */
+.month {
+  color: white;
+}
+
+.month div {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+#monthyear {
+  font-size: 25px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+/* Previous button inside month header */
+.month .prev {
+  float: left;
+  padding-top: 0px;
+  font-size: 30px;
+  margin-left: 5px;
+}
+
+/* Next button */
+.month .next {
+  float: right;
+  padding-top: 0px;
+  font-size: 30px;
+  margin-right: 5px;
+}
+
+/* Weekdays (Mon-Sun) */
+.weekdays {
+  width: 100%;
+  margin: 0;
+  padding: 10px 0;
+  background-color: #ddd;
+
+  display: grid;
+  grid-template-columns: repeat(7, calc(100% / 7));
+}
+
+.weekdays div {
+  position: relative;
+  display: inline-block;
+  color: #666;
+  text-align: center;
+  justify-content: space-between;
+}
+
+/* Days (1-31) */
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, calc(100% / 7));
+
+  background: #eee;
+
+  width: 100%;
+
+  margin: 0;
+  border-radius: 0 0 5% 5%;
+}
+
+.days div {
+  cursor: default;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+
+  /* border: 1px solid red; */
+  aspect-ratio: 1;
+
+  text-align: center;
+  font-size: 16px;
+  color: #050000;
+}
+/* 
+.days div:hover {
+  background: #d2d691;
+  border: hidden;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+} */
+
+/* Highlight the hovered day */
+.days div.pinned span {
+  cursor: pointer;
+  background: #ff99b7;
+  color: white;
+
+  padding: 8px;
+
+  width: 26px;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: hidden;
+  border-radius: 100%;
+}
+
+.days div.active {
+  transition: all 0.15s ease-in-out;
+}
+
+.days div.active:hover {
+  background: #fff;
+  transform: scale(1.15);
+}
+
+.month .prev:hover,
+.month .next:hover {
+  color: rgb(13, 12, 103);
+}
+
+.days div.chosen {
+  background: #d56587;
+  color: white;
+}
+
+.days div.chosen:hover {
+  background: #d56587;
+  color: white;
+  transform: scale(1.15);
+}
