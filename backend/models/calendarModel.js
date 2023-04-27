@@ -115,6 +115,7 @@ exports.getAssignments = async (session, month, year) => {
         course_title: c.title,
         course_no: c.course_no,
         course_icon: c.course_icon,
+        course_id: c.cv_cid,
 
         assignment_id: assign.itemid,
         assignment_title: assign.title,
