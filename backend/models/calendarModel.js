@@ -2,6 +2,8 @@ const axios = require("axios");
 
 const dbModel = require("../models/dbModel");
 const coursevilleModel = require("../models/coursevilleModel");
+
+const cacheUtil = require("../utils/cacheUtil");
 /*
   ==================== getAcamedicYear ====================
  */
@@ -25,45 +27,55 @@ exports.getAcademicYear = (m, y) => {
   ==================== getSemesterCourses ====================
  */
 exports.getSemesterCourses = async (session, month, year) => {
-  try {
-    let responseData = await axios.get(
-      `https://www.mycourseville.com/api/v1/public/get/user/courses?detail=1`,
-      session.accessTokenConfig
-    );
-    const json = responseData.data;
+  const CACHE_ID = `c-${session.token}`;
+  let courses = cacheUtil.get(CACHE_ID);
 
-    let courses = json.data.student;
-    let courseFilter = exports.getAcademicYear(month, year);
+  if (!courses) {
+    try {
+      let responseData = await axios.get(
+        `https://www.mycourseville.com/api/v1/public/get/user/courses?detail=1`,
+        session.accessTokenConfig
+      );
 
-    // Filter for only this semester's courses
-    return courses.filter(
-      (element) => element.year === courseFilter.year && element.semester === courseFilter.semester
-    );
-  } catch (err) {
-    console.error(err);
+      courses = responseData.data.data.student;
+      cacheUtil.cache(CACHE_ID, courses, 3600 * 6);
+    } catch (err) {
+      console.error(err);
+    }
   }
+
+  let courseFilter = exports.getAcademicYear(month, year);
+
+  // Filter for only this semester's courses
+  return courses.filter(
+    (element) => element.year === courseFilter.year && element.semester === courseFilter.semester
+  );
 };
 
 /*
   ==================== getCourseAssignmentsOnTheMonth ====================
  */
 exports.getCourseAssignmentsOnTheMonth = async (session, courseId, month) => {
-  try {
-    let responseData = await axios.get(
-      `https://www.mycourseville.com/api/v1/public/get/course/assignments?cv_cid=${courseId}&detail=1`,
-      session.accessTokenConfig
-    );
-    const json = responseData.data;
+  const CACHE_ID = `ca-${courseId}-${session.token}`;
+  let assignments = cacheUtil.get(CACHE_ID);
 
-    let assignments = json.data;
+  if (!assignments) {
+    try {
+      let responseData = await axios.get(
+        `https://www.mycourseville.com/api/v1/public/get/course/assignments?cv_cid=${courseId}&detail=1`,
+        session.accessTokenConfig
+      );
 
-    // Filter for only current month's assignment
-    return assignments.filter(
-      (element) => new Date(element.duetime * 1000).getMonth() + 1 === month
-    );
-  } catch (err) {
-    console.error(err);
+      assignments = responseData.data.data;
+      cacheUtil.cache(CACHE_ID, assignments, 1800);
+
+      // Filter for only current month's assignment
+    } catch (err) {
+      console.error(err);
+    }
   }
+
+  return assignments.filter((element) => new Date(element.duetime * 1000).getMonth() + 1 === month);
 };
 
 /*
@@ -71,7 +83,7 @@ exports.getCourseAssignmentsOnTheMonth = async (session, courseId, month) => {
  */
 exports.getAssignments = async (session, month, year) => {
   const courses = await exports.getSemesterCourses(session, month, year);
-  const eventData = await dbModel.getTable();
+  const eventData = []; // const eventData = await dbModel.getTable();
   const userInfo = await coursevilleModel.getUserInfo(session);
 
   const USER_ID = userInfo.data.account.uid;
