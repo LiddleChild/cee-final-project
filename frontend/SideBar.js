@@ -8,7 +8,6 @@ class SideBar {
   update(lists, date) {
     this.lists = lists;
     this.date = date;
-
     this.render();
   }
 
@@ -91,29 +90,49 @@ class SideBar {
     addAssignment.setAttribute("class", "add-assignment");
     addDue.setAttribute("class", "add-due");
 
-    let CourseInput = document.createElement("input");
-    CourseInput.setAttribute("class", "course-input");
-    let AssignmentInput = document.createElement("input");
-    AssignmentInput.setAttribute("class", "Assignment-input");
-    let DueInput = document.createElement("input");
-    DueInput.setAttribute("class", "due-input");
+    let courseInput = document.createElement("input");
+    courseInput.setAttribute("class", "course-input");
+    let assignmentInput = document.createElement("input");
+    assignmentInput.setAttribute("class", "Assignment-input");
+    let dueInput = document.createElement("input");
+    dueInput.setAttribute("class", "due-input");
+    dueInput.setAttribute("placeholder","hh:mm   e.g. 12:30")
+    dueInput.addEventListener("input", (key) => {
+      if (key.keyCode != 186) {
+        dueInput.value = dueInput.value.replace(/[^0-9:]/g, "");
+      }
+    })
 
     addCourse.appendChild(
       document.createElement("div").appendChild(document.createTextNode("Course Title: "))
     );
-    addCourse.appendChild(CourseInput);
+    addCourse.appendChild(courseInput);
     addAssignment.appendChild(
       document.createElement("div").appendChild(document.createTextNode("Assignment Title: "))
     );
-    addAssignment.appendChild(AssignmentInput);
+    addAssignment.appendChild(assignmentInput);
     addDue.appendChild(document.createElement("div").appendChild(document.createTextNode("Due: ")));
-    addDue.appendChild(DueInput);
+    addDue.appendChild(dueInput);
 
     let addTodoBtn = document.createElement("button");
     addTodoBtn.appendChild(
       document.createTextNode("Add")
     );
     addTodoBtn.setAttribute("class", "add-todo-btn");
+    addTodoBtn.addEventListener("click",() => {
+      if (dueInput.value.slice(2,3) != ":" ) {
+        alert("Invalid Due Time");
+      } else {
+        let newObj = {};
+        newObj.course_title = courseInput.value;
+        newObj.assignment_title = assignmentInput.value
+        let d = new Date(this.date.getFullYear(),this.date.getMonth(),this.date.getDate(),dueInput.value.slice(0,2),dueInput.value.slice(3,5));
+        newObj.assignment_duetime = Math.floor(d/1000);
+        
+        this.lists.push(newObj);
+        this.update(this.lists,this.date);
+      }
+    })
 
     addTodo.appendChild(addCourse);
     addTodo.appendChild(addAssignment);
