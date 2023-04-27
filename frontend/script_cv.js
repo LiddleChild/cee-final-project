@@ -90,8 +90,12 @@ function updateSidebar() {
 }
 function createAddButton() {
   var addButton = document.createElement("button");
+  var addTodo = document.querySelector(".add-todo");
   addButton.appendChild(document.createTextNode("+"));
   addButton.setAttribute("class", "addButton");
+  addButton.addEventListener("click",() => {
+    addTodo.classList.toggle("hidden");
+  })
   return addButton;
 }
 async function updateCal() {
