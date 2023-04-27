@@ -74,10 +74,10 @@ class SideBar {
     let addButton = document.createElement("button");
     addButton.appendChild(document.createTextNode("+"));
     addButton.setAttribute("class", "addButton");
-    // addButton.addEventListener("click",() => {
-    //   let addTodo = document.querySelector(".add-todo");
-    //   addTodo.classList.toggle("hidden");
-    // })
+    addButton.addEventListener("click",() => {
+      let addTodo = document.querySelector(".add-todo");
+      addTodo.classList.toggle("hidden");
+    })
     this.elementLists.appendChild(addButton);
   }
 }
