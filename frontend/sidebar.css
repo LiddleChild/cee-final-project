@@ -5,7 +5,11 @@
   border-radius: 16px;
   padding: 12px;
 
-  background-color: rgb(195, 101, 138);
+  box-shadow: 6px 6px rgba(0, 0, 0, 0.4);
+
+  /* background-color: rgb(195, 101, 138); */
+  background-color: #f0f0f0;
+  color: black;
 }
 
 .date {
@@ -14,6 +18,11 @@
 
 .items div {
   font-size: 14px;
+}
+
+.task-item span {
+  text-align: left;
+  margin-right: 12px;
 }
 
 .addButton {
@@ -26,6 +35,11 @@
   height: 25px;
   border: none;
   margin-bottom: 5px;
+}
+
+.addButton:hover {
+  background-color: palevioletred;
+  color: white;
 }
 
 .add-todo {

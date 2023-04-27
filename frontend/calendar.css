@@ -4,6 +4,9 @@
 
   width: 600px;
   height: max-content;
+
+  box-shadow: 6px 6px rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
 }
 
 /* Month header */
@@ -23,6 +26,7 @@
 
 /* Month list */
 .month {
+  background-color: #bd4a4a;
   color: white;
 }
 
@@ -104,18 +108,11 @@
   font-size: 16px;
   color: #050000;
 }
-/* 
-.days div:hover {
-  background: #d2d691;
-  border: hidden;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-} */
 
 /* Highlight the hovered day */
 .days div.pinned span {
-  background: #ff99b7;
+  /* background: #ff99b7; */
+  background-color: #f69e7b;
   color: white;
 
   padding: 8px;
@@ -145,13 +142,18 @@
   color: rgb(13, 12, 103);
 }
 
+.prev,
+.next {
+  cursor: pointer;
+}
+
 .days div.chosen {
-  background: #d56587;
+  background: #f69e7b;
   color: white;
 }
 
 .days div.chosen:hover {
-  background: #d56587;
+  background: #f69e7b;
   color: white;
   transform: scale(1.15);
 }

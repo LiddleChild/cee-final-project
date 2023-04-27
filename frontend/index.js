@@ -1,7 +1,7 @@
 //----------------------Buttons------------------------
 let loginPanel = document.getElementsByClassName("login-panel")[0];
 let logoutPanel = document.getElementsByClassName("logout-panel")[0];
-
+let loadingScreen = document.getElementsByClassName("loading-screen")[0];
 //----------------------Variables------------------------
 const BACKEND_ADDRESS = "localhost:3000";
 
@@ -49,6 +49,7 @@ fetch("http://localhost:3000/courseville/get_user_info", {
     userInfo = response.data;
     isLoggedIn = !!userInfo;
 
+    showLoadingScreen(false);
     updateLoginPanel();
     fetchData();
   })
@@ -57,18 +58,19 @@ fetch("http://localhost:3000/courseville/get_user_info", {
 //----------------------Data fetching & Components updating------------------------
 function fetchData() {
   if (isLoggedIn) {
+    showLoadingScreen(true);
+
     calendarData = [];
     updateCalendar();
 
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
 
-    console.log("FETCHING...");
     const fetchOption = { method: "GET", credentials: "include" };
     fetch(`http://localhost:3000/api/get_calendar?month=${month}&year=${year}`, fetchOption)
       .then((data) => data.json())
       .then((response) => {
-        console.log("DONE!");
+        showLoadingScreen(false);
 
         calendarData = response;
 
@@ -87,13 +89,18 @@ function updateSidebar() {
 }
 
 function updateLoginPanel() {
-  loginPanel.style.display = !isLoggedIn ? "block" : "none";
-  logoutPanel.style.display = isLoggedIn ? "block" : "none";
+  loginPanel.style.display = !isLoggedIn ? "flex" : "none";
+  logoutPanel.style.display = isLoggedIn ? "flex" : "none";
 
   if (isLoggedIn) {
     let fullEnName = `${userInfo.student.firstname_en} ${userInfo.student.lastname_en}`;
     document.getElementById("username-field").innerText = fullEnName;
+    document.getElementById("user-img").setAttribute("src", userInfo.account.profile_pict);
   }
+}
+
+function showLoadingScreen(show) {
+  loadingScreen.style.visibility = show ? "visible" : "hidden";
 }
 
 //----------------------Button Handler------------------------
@@ -108,9 +115,11 @@ function previousMonth() {
 }
 
 function login() {
+  showLoadingScreen(true);
   window.location.href = `http://${BACKEND_ADDRESS}/courseville/login`;
 }
 
 function logout() {
+  showLoadingScreen(true);
   window.location.href = `http://${BACKEND_ADDRESS}/courseville/logout`;
 }

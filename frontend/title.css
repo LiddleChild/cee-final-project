@@ -1,7 +1,6 @@
 .title-bar {
-  /* background-color: red; */
-  border-bottom: 1px solid black;
-  padding: 8px;
+  /* border-bottom: 1px solid black; */
+  padding: 12px;
 
   display: flex;
   justify-content: space-between;
@@ -13,5 +12,48 @@
 }
 
 .logout-panel {
-  display: block;
+  display: flex;
+  align-items: center;
+}
+
+#logout,
+#login {
+  font-size: 14px;
+  font-weight: 500;
+
+  color: black;
+  box-shadow: 4px 4px rgba(0, 0, 0, 0.4);
+
+  /* background-color: transparent; */
+  transition: all 0.25s ease;
+}
+
+#logout:hover,
+#login:hover {
+  transform: translateX(6px);
+}
+
+#username-field {
+  font-size: 16px;
+  margin-right: 24px;
+}
+
+#user-img {
+  width: 32px;
+  aspect-ratio: 1;
+
+  border-radius: 50%;
+  border: 2px solid white;
+
+  margin-right: 6px;
+}
+
+.user-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+#app-title {
+  font-size: 28px;
+  font-weight: 800;
 }

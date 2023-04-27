@@ -2,27 +2,48 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+
     <title>MyCalendarVille</title>
+
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="title.css" />
     <link rel="stylesheet" href="calendar.css" />
     <link rel="stylesheet" href="sidebar.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=K2D" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,200,0,0"
+    />
+
     <script src="SideBar.js" defer></script>
     <script src="Calendar.js" defer></script>
     <script src="index.js" defer></script>
   </head>
 
   <body>
+    <div class="loading-screen"></div>
+
     <div class="title-bar">
-      <div>myCalendarVille</div>
+      <div id="app-title">myCalendarVille</div>
 
       <div class="login-panel">
-        <button id="login" onclick="login()">Login</button>
+        <button id="login" onclick="login()">
+          Login <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
       </div>
+
       <div class="logout-panel">
-        <span id="username-field"></span>
-        <button id="logout" onclick="logout()">Logout</button>
+        <span class="user-container">
+          <img id="user-img" />
+          <span id="username-field"></span>
+        </span>
+        <button id="logout" onclick="logout()">
+          Logout <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
       </div>
     </div>
 
