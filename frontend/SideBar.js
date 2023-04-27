@@ -109,9 +109,16 @@ class SideBar {
     addDue.appendChild(document.createElement("div").appendChild(document.createTextNode("Due: ")));
     addDue.appendChild(DueInput);
 
+    let addTodoBtn = document.createElement("button");
+    addTodoBtn.appendChild(
+      document.createTextNode("Add")
+    );
+    addTodoBtn.setAttribute("class", "add-todo-btn");
+
     addTodo.appendChild(addCourse);
     addTodo.appendChild(addAssignment);
     addTodo.appendChild(addDue);
+    addTodo.appendChild(addTodoBtn);
     this.elementLists.appendChild(addTodo);
   }
 }
