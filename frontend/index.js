@@ -7,33 +7,86 @@ let logoutPanel = document.getElementsByClassName("logout-panel")[0];
 //-----------------------------------------------------
 let monthHeader = document.getElementById("monthyear");
 let monthList = {
-  Jan: ["January", 31],
-  Feb: ["February", 28],
-  Mar: ["March", 31],
-  Apr: ["April", 30],
-  May: ["May", 31],
-  Jun: ["June", 30],
-  Jul: ["July", 31],
-  Aug: ["August", 31],
-  Sep: ["September", 30],
-  Oct: ["October", 31],
-  Nov: ["November", 30],
-  Dec: ["December", 31],
+  Jan: { name: "January", day: 31 },
+  Feb: { name: "February", day: 28 },
+  Mar: { name: "March", day: 31 },
+  Apr: { name: "April", day: 30 },
+  May: { name: "May", day: 31 },
+  Jun: { name: "June", day: 30 },
+  Jul: { name: "July", day: 31 },
+  Aug: { name: "August", day: 31 },
+  Sep: { name: "September", day: 30 },
+  Oct: { name: "October", day: 31 },
+  Nov: { name: "November", day: 30 },
+  Dec: { name: "December", day: 31 },
 };
 let dayUl = document.getElementById("dayUl");
 var userInfo = undefined;
 //----------------------Date---------------------------
 let d = new Date();
 let chosenDate = d.toString().split(" ");
-var firstDayOfMonth = new Date(monthList[chosenDate[1]][0] + " 1, " + chosenDate[3] + " 00:00:00");
+console.log(chosenDate);
+var firstDayOfMonth = new Date(
+  monthList[chosenDate[1]].name + " 1, " + chosenDate[3] + " 00:00:00"
+);
 let currentDate = firstDayOfMonth.toString().split(" ");
 var firstWeekday = firstDayOfMonth.getDay();
 //-----------------------------------------------------
+// SideBar class (init, update side bar)
+let sideBar = new SideBar(
+  document.getElementsByClassName("date-items")[0],
+  document.getElementsByClassName("date")[0]
+);
+
 var calendar;
-initiateSidebar();
 initiateCal();
 getCalendar();
-console.log(firstWeekday);
+
+function initiateSidebar() {
+  document.getElementsByClassName("date")[0].innerHTML =
+    chosenDate[2] + " " + chosenDate[1] + " " + chosenDate[3];
+
+  var itemList = document.getElementsByClassName("date-items")[0];
+
+  // Clear all children
+  while (itemList.firstChild) itemList.removeChild(itemList.firstChild);
+
+  var none = document.createElement("div");
+  none.innerHTML = "Nothing to do today!";
+  itemList.appendChild(none);
+  var addButton = createAddButton();
+  itemList.appendChild(addButton);
+}
+
+async function initiateCal() {
+  while (dayUl.firstChild) {
+    dayUl.removeChild(dayUl.firstChild);
+  }
+
+  monthHeader.innerHTML = monthList[currentDate[1]].name + " " + currentDate[3];
+
+  addEmptyDays();
+
+  for (let i = 1; i <= monthList[currentDate[1]].day; i++) {
+    var li = document.createElement("div");
+    let text = document.createElement("span");
+    text.innerText = i;
+    li.appendChild(text);
+    li.onclick = function (e) {
+      chosenDate[2] = i;
+      if (document.querySelector(".chosen"))
+        document.querySelector(".chosen").classList.remove("chosen");
+      if (e.target.tagName === "SPAN") {
+        e.target.closest("div").classList.add("chosen");
+      } else {
+        e.target.classList.add("chosen");
+      }
+      updateSidebar();
+    };
+    dayUl.appendChild(li);
+  }
+  addNextMonthDays();
+}
 
 function getCalendar() {
   fetch(
@@ -48,47 +101,15 @@ function getCalendar() {
     .then((res) => res.json())
     .then((data) => {
       calendar = data;
-    })
-    .then(() => {
-      console.log(calendar);
     });
 }
 
 function updateSidebar() {
-  console.log(chosenDate[2]);
-  document.getElementsByClassName("date")[0].innerHTML =
-    chosenDate[2] + " " + chosenDate[1] + " " + chosenDate[3];
-  var itemList = document.getElementsByClassName("items")[0];
-  while (itemList.firstChild) itemList.removeChild(itemList.firstChild);
-  var chosenAssignmentList = [];
-
   if (chosenDate[2] in calendar) {
-    chosenAssignmentList = calendar[chosenDate[2]];
-    for (let i = 0; i < chosenAssignmentList.length; i++) {
-      var item = document.createElement("div");
-      if (
-        (i > 0 &&
-          chosenAssignmentList[i]["course_no"] != chosenAssignmentList[i - 1]["course_no"]) ||
-        i == 0
-      ) {
-        var subject = document.createElement("h2");
-        subject.innerHTML = chosenAssignmentList[i]["course_title"];
-        console.log(subject);
-        itemList.appendChild(subject);
-      }
-      var dueDate = new Date(chosenAssignmentList[i]["assignment_duetime"] * 1000);
-      item.innerHTML =
-        dueDate.toTimeString().split(" ")[0] + ": " + chosenAssignmentList[i]["assignment_title"];
-      itemList.appendChild(item);
-    }
-  } else {
-    var none = document.createElement("div");
-    none.innerHTML = "Nothing to do today!";
-    itemList.appendChild(none);
+    sideBar.update(calendar[chosenDate[2]], new Date(chosenDate.join(" ")));
   }
-  var addButton = createAddButton();
-  itemList.appendChild(addButton);
 }
+
 function createAddButton() {
   var addButton = document.createElement("button");
   addButton.appendChild(document.createTextNode("+"));
@@ -106,11 +127,11 @@ async function updateCal() {
     dayUl.removeChild(dayUl.firstChild);
   }
 
-  monthHeader.innerHTML = monthList[currentDate[1]][0] + " " + currentDate[3];
+  monthHeader.innerHTML = monthList[currentDate[1]].name + " " + currentDate[3];
 
   addEmptyDays();
 
-  for (let i = 1; i <= monthList[currentDate[1]][1]; i++) {
+  for (let i = 1; i <= monthList[currentDate[1]].day; i++) {
     var li = document.createElement("div");
     let text = document.createElement("span");
     text.innerText = i;
@@ -136,8 +157,7 @@ async function updateCal() {
 
 function addEmptyDays() {
   previousMonth = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() - 1, 1);
-  previousMonth = monthList[previousMonth.toString().split(" ")[1]][1];
-  console.log(previousMonth);
+  previousMonth = monthList[previousMonth.toString().split(" ")[1]].day;
   for (let i = previousMonth - firstWeekday + 1; i <= previousMonth; i++) {
     var empty = document.createElement("div");
     empty.appendChild(document.createTextNode(i));
@@ -148,7 +168,6 @@ function addEmptyDays() {
 function addNextMonthDays() {
   var lastDay = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 0);
   lastDay = lastDay.getDay() + 1;
-  console.log(lastDay);
 
   for (let i = 1; i <= 7 - lastDay; i++) {
     var day = document.createElement("div");
@@ -190,7 +209,6 @@ function toggleButton() {
     .then((response) => response.json())
     .then((json) => {
       userInfo = json.data;
-      console.log(userInfo);
 
       loginPanel.style.display = !userInfo ? "block" : "none";
       logoutPanel.style.display = !!userInfo ? "block" : "none";
@@ -206,48 +224,6 @@ function toggleButton() {
     });
 }
 
-async function initiateCal() {
-  while (dayUl.firstChild) {
-    dayUl.removeChild(dayUl.firstChild);
-  }
-
-  monthHeader.innerHTML = monthList[currentDate[1]][0] + " " + currentDate[3];
-
-  addEmptyDays();
-
-  for (let i = 1; i <= monthList[currentDate[1]][1]; i++) {
-    var li = document.createElement("div");
-    let text = document.createElement("span");
-    text.innerText = i;
-    li.appendChild(text);
-    li.onclick = function (e) {
-      chosenDate[2] = i;
-      if (document.querySelector(".chosen"))
-        document.querySelector(".chosen").classList.remove("chosen");
-      if (e.target.tagName === "SPAN") {
-        e.target.closest("div").classList.add("chosen");
-      } else {
-        e.target.classList.add("chosen");
-      }
-      updateSidebar();
-    };
-    dayUl.appendChild(li);
-  }
-  addNextMonthDays();
-}
-
-function initiateSidebar() {
-  console.log(chosenDate[2]);
-  document.getElementsByClassName("date")[0].innerHTML =
-    chosenDate[2] + " " + chosenDate[1] + " " + chosenDate[3];
-  var itemList = document.getElementsByClassName("items")[0];
-  while (itemList.firstChild) itemList.removeChild(itemList.firstChild);
-  var none = document.createElement("div");
-  none.innerHTML = "Nothing to do today!";
-  itemList.appendChild(none);
-  var addButton = createAddButton();
-  itemList.appendChild(addButton);
-}
 toggleButton();
 
 function login() {
