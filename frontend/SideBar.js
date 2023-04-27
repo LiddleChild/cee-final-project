@@ -18,7 +18,7 @@ class SideBar {
 
   render() {
     // Set date
-    this.elementDate.innerHTML = new Date().toLocaleDateString("en-us", {
+    this.elementDate.innerHTML = this.date.toLocaleDateString("en-us", {
       weekday: "long",
       year: "numeric",
       month: "short",
@@ -74,10 +74,10 @@ class SideBar {
     let addButton = document.createElement("button");
     addButton.appendChild(document.createTextNode("+"));
     addButton.setAttribute("class", "addButton");
-    addButton.addEventListener("click",() => {
+    addButton.addEventListener("click", () => {
       let addTodo = document.querySelector(".add-todo");
       addTodo.classList.toggle("hidden");
-    })
+    });
     this.elementLists.appendChild(addButton);
 
     // Add "ass event" panel
@@ -87,20 +87,24 @@ class SideBar {
     let addCourse = document.createElement("div");
     let addAssignment = document.createElement("div");
     let addDue = document.createElement("div");
-    addCourse.setAttribute("class","add-course");
-    addAssignment.setAttribute("class","add-assignment");
-    addDue.setAttribute("class","add-due");
+    addCourse.setAttribute("class", "add-course");
+    addAssignment.setAttribute("class", "add-assignment");
+    addDue.setAttribute("class", "add-due");
 
     let CourseInput = document.createElement("input");
-    CourseInput.setAttribute("class","course-input");
+    CourseInput.setAttribute("class", "course-input");
     let AssignmentInput = document.createElement("input");
-    AssignmentInput.setAttribute("class","Assignment-input");
+    AssignmentInput.setAttribute("class", "Assignment-input");
     let DueInput = document.createElement("input");
-    DueInput.setAttribute("class","due-input");
+    DueInput.setAttribute("class", "due-input");
 
-    addCourse.appendChild(document.createElement("div").appendChild(document.createTextNode("Course Title: ")));
+    addCourse.appendChild(
+      document.createElement("div").appendChild(document.createTextNode("Course Title: "))
+    );
     addCourse.appendChild(CourseInput);
-    addAssignment.appendChild(document.createElement("div").appendChild(document.createTextNode("Assignment Title: ")));
+    addAssignment.appendChild(
+      document.createElement("div").appendChild(document.createTextNode("Assignment Title: "))
+    );
     addAssignment.appendChild(AssignmentInput);
     addDue.appendChild(document.createElement("div").appendChild(document.createTextNode("Due: ")));
     addDue.appendChild(DueInput);
@@ -108,6 +112,6 @@ class SideBar {
     addTodo.appendChild(addCourse);
     addTodo.appendChild(addAssignment);
     addTodo.appendChild(addDue);
-    this.elementLists.appendChild(addTodo)
+    this.elementLists.appendChild(addTodo);
   }
 }

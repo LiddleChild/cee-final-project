@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="sidebar.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=K2D" />
     <script src="SideBar.js" defer></script>
+    <script src="Calendar.js" defer></script>
     <script src="index.js" defer></script>
   </head>
 
@@ -35,10 +36,10 @@
         <div class="calendar">
           <div class="month">
             <div class="prev">
-              <div class="fa fa-angle-left prev" onclick="prevMonth()">&lt;</div>
+              <div class="fa fa-angle-left prev" onclick="previousMonth()">&lt;</div>
             </div>
 
-            <div id="monthyear">August 2021</div>
+            <div id="monthyear"></div>
 
             <div class="next">
               <div class="fa fa-angle-right next" onclick="nextMonth()">&gt;</div>
@@ -56,7 +57,7 @@
               <div>Sat</div>
             </div>
 
-            <div class="days" id="dayUl"></div>
+            <div class="days"></div>
           </div>
         </div>
       </div>
