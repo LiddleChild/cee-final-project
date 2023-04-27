@@ -40,7 +40,8 @@
 }
 
 .add-todo div {
-  display: block;
+  display: flex;
+  flex-direction: column;
 }
 
 .add-todo div input {
