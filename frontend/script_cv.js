@@ -2,8 +2,8 @@
 
 const backendIPAddress = "localhost:3000";
 //----------------------Buttons------------------------
-let logoutButton = document.getElementById("logout");
-let loginButton = document.getElementById("login");
+let loginPanel = document.getElementsByClassName("login-panel")[0];
+let logoutPanel = document.getElementsByClassName("logout-panel")[0];
 //-----------------------------------------------------
 let monthHeader = document.getElementById("monthyear");
 let monthLi = {
@@ -120,7 +120,7 @@ async function updateCal() {
       if (document.querySelector(".chosen"))
         document.querySelector(".chosen").classList.remove("chosen");
       if (e.target.tagName === "SPAN") {
-        e.target.closest("div").classList.add("chosen")
+        e.target.closest("div").classList.add("chosen");
       } else {
         e.target.classList.add("chosen");
       }
@@ -187,15 +187,16 @@ function toggleButton() {
   })
     .then((response) => response.json())
     .then((json) => {
-      console.log(json);
       userInfo = json.data;
       console.log(userInfo);
-      if (userInfo == undefined) {
-        loginButton.style.display = "block";
-        logoutButton.style.display = "none";
-      } else {
-        loginButton.style.display = "none";
-        logoutButton.style.display = "block";
+
+      loginPanel.style.display = !userInfo ? "block" : "none";
+      logoutPanel.style.display = !!userInfo ? "block" : "none";
+
+      if (userInfo) {
+        document.querySelector(
+          "#username-field"
+        ).innerText = `${userInfo.student.firstname_en} ${userInfo.student.lastname_en}`;
       }
     })
     .catch((err) => {

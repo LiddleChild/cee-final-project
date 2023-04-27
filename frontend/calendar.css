@@ -115,7 +115,6 @@
 
 /* Highlight the hovered day */
 .days div.pinned span {
-  cursor: pointer;
   background: #ff99b7;
   color: white;
 
@@ -132,6 +131,7 @@
 }
 
 .days div.active {
+  cursor: pointer;
   transition: all 0.15s ease-in-out;
 }
 

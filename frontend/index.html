@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>MyCalendarVille</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="title.css" />
     <link rel="stylesheet" href="calendar.css" />
     <link rel="stylesheet" href="sidebar.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=K2D" />
@@ -12,12 +13,15 @@
 
   <body>
     <div class="title-bar">
-      <section class="section-center">
+      <div>myCalendarVille</div>
+
+      <div class="login-panel">
         <button id="login" onclick="login()">Login</button>
-      </section>
-      <section class="section-center">
+      </div>
+      <div class="logout-panel">
+        <span id="username-field"></span>
         <button id="logout" onclick="logout()">Logout</button>
-      </section>
+      </div>
     </div>
 
     <div class="body">
