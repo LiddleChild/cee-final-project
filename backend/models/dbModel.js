@@ -40,11 +40,13 @@ exports.addItem = async (user_id, event_id, data) => {
     const params = {
       TableName: process.env.STATUS_TABLE_NAME,
       Item: {
-        user_id,
-        event_id,
+        user_id: String(user_id),
+        event_id: String(event_id),
         data: JSON.stringify(data),
       },
     };
+
+    console.log(params);
 
     await client.send(new PutCommand(params));
     return JSON.stringify({ message: "added item successfully" });
@@ -61,8 +63,8 @@ exports.deleteItem = async (user_id, event_id) => {
     const params = {
       TableName: process.env.STATUS_TABLE_NAME,
       Key: {
-        user_id,
-        event_id,
+        user_id: String(user_id),
+        event_id: String(event_id),
       },
     };
 

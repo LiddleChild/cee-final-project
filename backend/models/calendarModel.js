@@ -83,7 +83,7 @@ exports.getCourseAssignmentsOnTheMonth = async (session, courseId, month) => {
  */
 exports.getAssignments = async (session, month, year) => {
   const courses = await exports.getSemesterCourses(session, month, year);
-  const eventData = []; // const eventData = await dbModel.getTable();
+  const eventData = await dbModel.getTable();
   const userInfo = await coursevilleModel.getUserInfo(session);
 
   const USER_ID = userInfo.data.account.uid;
