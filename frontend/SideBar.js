@@ -35,13 +35,14 @@ class SideBar {
       // Convert to map of course to lists of assignments
       let courseAssignmentMap = {};
       for (let i of this.lists) {
-        if (!courseAssignmentMap[i.course_title]) courseAssignmentMap[i.course_title] = [];
+        if (!courseAssignmentMap[i.course_title])
+          courseAssignmentMap[i.course_title] = [];
         courseAssignmentMap[i.course_title].push(i);
       }
 
       for (let ctitle of Object.keys(courseAssignmentMap)) {
         let item = document.createElement("div");
-        item.setAttribute("id", "item")
+        item.setAttribute("id", "item");
 
         // Add course title
         let courseName = document.createElement("h2");
@@ -97,20 +98,21 @@ class SideBar {
               .then((res) => console.log(res))
               .catch((err) => console.error(err));
           };
-
           // Add "delete event" button
-          let deleteEventBtn = document.createElement("button")
+          let deleteEventBtn = document.createElement("button");
           deleteEventBtn.appendChild(document.createTextNode("delete"));
           deleteEventBtn.setAttribute("class", "deleteItem");
           deleteEventBtn.addEventListener("click", () => {
             this.elementLists.removeChild(item);
           });
 
+          assignmentItem.appendChild(markAsDoneBox);
+
           assignmentItem.appendChild(assignmentItemTime);
           assignmentItem.appendChild(assignmentItemText);
-          courseName.appendChild(markAsDoneBox);
-          assignmentItem.appendChild(deleteEventBtn);
-
+          if (assign.type == "custom") {
+            assignmentItem.appendChild(deleteEventBtn);
+          }
           assignmentList.appendChild(assignmentItem);
         }
 
@@ -162,14 +164,22 @@ class SideBar {
     });
 
     addCourse.appendChild(
-      document.createElement("div").appendChild(document.createTextNode("Course Title: "))
+      document
+        .createElement("div")
+        .appendChild(document.createTextNode("Course Title: "))
     );
     addCourse.appendChild(courseInput);
     addAssignment.appendChild(
-      document.createElement("div").appendChild(document.createTextNode("Assignment Title: "))
+      document
+        .createElement("div")
+        .appendChild(document.createTextNode("Assignment Title: "))
     );
     addAssignment.appendChild(assignmentInput);
-    addDue.appendChild(document.createElement("div").appendChild(document.createTextNode("Due: ")));
+    addDue.appendChild(
+      document
+        .createElement("div")
+        .appendChild(document.createTextNode("Due: "))
+    );
     addDue.appendChild(dueInput);
 
     let addTodoBtn = document.createElement("button");
@@ -191,7 +201,7 @@ class SideBar {
         );
         newObj.assignment_duetime = Math.floor(d / 1000);
         newObj.status = "NOT_DONE";
-
+        newObj.type = "custom";
         this.lists.push(newObj);
         this.update(this.lists, this.date);
       }
@@ -203,8 +213,4 @@ class SideBar {
     addTodo.appendChild(addTodoBtn);
     this.elementLists.appendChild(addTodo);
   }
-}
-
-function addMarkAsDoneBtn() {
-  let;
 }

@@ -84,14 +84,20 @@
 
 .mark-as-done {
   float: left;
-  margin-right: 30px;
+  margin-right: 10px;
   transform: scale(1.5);
+
 }
 
 .deleteItem {
-  float: right;
-  margin-right: 30px;
-  transform: scale(1.5);
+  /* float: right; */
+  margin-right: 0px;
+  transform: scale(0.9);
+  background-color: rgb(202, 201, 201);
+}
+.deleteItem:hover{
+  background-color:rgb(220, 97, 97);
+  color:white;
 }
 
 .task-item {
