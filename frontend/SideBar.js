@@ -10,6 +10,7 @@ class SideBar {
   update(lists, date) {
     this.lists = lists;
     this.date = date;
+    console.log("list",this.lists)
     this.render();
   }
 
@@ -191,6 +192,16 @@ class SideBar {
         );
         newObj.assignment_duetime = Math.floor(d / 1000);
         newObj.status = "NOT_DONE";
+
+        fetch(`http://localhost:3000/api/create_event`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newObj)
+        }).then((response) => console.log(response))
+          .catch((error) => console.log(error));
 
         this.lists.push(newObj);
         this.update(this.lists, this.date);
