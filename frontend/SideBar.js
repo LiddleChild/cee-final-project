@@ -127,7 +127,7 @@ class SideBar {
     });
     this.elementLists.appendChild(addButton);
 
-    // Add "ass event" panel
+    // Add "add event" panel
     let addTodo = document.createElement("div");
     addTodo.setAttribute("class", "add-todo hidden");
 
@@ -180,6 +180,7 @@ class SideBar {
           dueInput.value.slice(3, 5)
         );
         newObj.assignment_duetime = Math.floor(d / 1000);
+        newObj.status = "NOT_DONE";
 
         this.lists.push(newObj);
         this.update(this.lists, this.date);
