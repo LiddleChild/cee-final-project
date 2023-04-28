@@ -41,6 +41,7 @@ class SideBar {
 
       for (let ctitle of Object.keys(courseAssignmentMap)) {
         let item = document.createElement("div");
+        item.setAttribute("id", "item")
 
         // Add course title
         let courseName = document.createElement("h2");
@@ -97,9 +98,18 @@ class SideBar {
               .catch((err) => console.error(err));
           };
 
+          // make delete button
+          let deleteEventBtn = document.createElement("button")
+          deleteEventBtn.appendChild(document.createTextNode("delete"));
+          deleteEventBtn.setAttribute("class", "deleteItem");
+          deleteEventBtn.addEventListener("click", () => {
+            this.elementLists.removeChild(item);
+          });
+
           assignmentItem.appendChild(assignmentItemTime);
           assignmentItem.appendChild(assignmentItemText);
           assignmentItem.appendChild(markAsDoneBox);
+          assignmentItem.appendChild(deleteEventBtn);
 
           assignmentList.appendChild(assignmentItem);
         }
