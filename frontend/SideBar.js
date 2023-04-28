@@ -35,8 +35,7 @@ class SideBar {
       // Convert to map of course to lists of assignments
       let courseAssignmentMap = {};
       for (let i of this.lists) {
-        if (!courseAssignmentMap[i.course_title])
-          courseAssignmentMap[i.course_title] = [];
+        if (!courseAssignmentMap[i.course_title]) courseAssignmentMap[i.course_title] = [];
         courseAssignmentMap[i.course_title].push(i);
       }
 
@@ -78,17 +77,24 @@ class SideBar {
           markAsDoneBox.setAttribute("type", "checkbox");
           markAsDoneBox.setAttribute("class", "mark-as-done");
           let checked = assign.status == "NOT_DONE" ? false : true;
+          console.log(assign.status);
           markAsDoneBox.checked = checked;
           markAsDoneBox.onclick = function () {
             assign.status = assign.status == "NOT_DONE" ? "DONE" : "NOT_DONE";
             fetch(`http://localhost:3000/api/event`, {
               method: "POST",
               credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+              },
               body: JSON.stringify({
                 event_id: assign.assignment_id,
                 status: assign.status,
               }),
-            });
+            })
+              .then((res) => res.json())
+              .then((res) => console.log(res))
+              .catch((err) => console.error(err));
           };
 
           assignmentItem.appendChild(assignmentItemTime);
@@ -146,22 +152,14 @@ class SideBar {
     });
 
     addCourse.appendChild(
-      document
-        .createElement("div")
-        .appendChild(document.createTextNode("Course Title: "))
+      document.createElement("div").appendChild(document.createTextNode("Course Title: "))
     );
     addCourse.appendChild(courseInput);
     addAssignment.appendChild(
-      document
-        .createElement("div")
-        .appendChild(document.createTextNode("Assignment Title: "))
+      document.createElement("div").appendChild(document.createTextNode("Assignment Title: "))
     );
     addAssignment.appendChild(assignmentInput);
-    addDue.appendChild(
-      document
-        .createElement("div")
-        .appendChild(document.createTextNode("Due: "))
-    );
+    addDue.appendChild(document.createElement("div").appendChild(document.createTextNode("Due: ")));
     addDue.appendChild(dueInput);
 
     let addTodoBtn = document.createElement("button");
