@@ -98,7 +98,7 @@ class SideBar {
               .catch((err) => console.error(err));
           };
 
-          // make delete button
+          // Add "delete event" button
           let deleteEventBtn = document.createElement("button")
           deleteEventBtn.appendChild(document.createTextNode("delete"));
           deleteEventBtn.setAttribute("class", "deleteItem");
@@ -108,7 +108,7 @@ class SideBar {
 
           assignmentItem.appendChild(assignmentItemTime);
           assignmentItem.appendChild(assignmentItemText);
-          assignmentItem.appendChild(markAsDoneBox);
+          courseName.appendChild(markAsDoneBox);
           assignmentItem.appendChild(deleteEventBtn);
 
           assignmentList.appendChild(assignmentItem);

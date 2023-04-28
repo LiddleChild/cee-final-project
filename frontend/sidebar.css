@@ -93,3 +93,7 @@
   margin-right: 30px;
   transform: scale(1.5);
 }
+
+.task-item {
+  margin: 0 0 0 30px;
+}
