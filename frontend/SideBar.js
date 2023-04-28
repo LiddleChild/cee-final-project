@@ -10,7 +10,7 @@ class SideBar {
   update(lists, date) {
     this.lists = lists;
     this.date = date;
-    console.log("list",this.lists)
+    console.log("list", this.lists);
     this.render();
   }
 
@@ -202,23 +202,18 @@ class SideBar {
         );
         newObj.assignment_duetime = Math.floor(d / 1000);
         newObj.status = "NOT_DONE";
-<<<<<<< HEAD
-        newObj.type = "custom";
-||||||| aa02655
-
-=======
 
         fetch(`http://localhost:3000/api/create_event`, {
           method: "POST",
           credentials: "include",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(newObj)
-        }).then((response) => console.log(response))
+          body: JSON.stringify(newObj),
+        })
+          .then((response) => console.log(response))
           .catch((error) => console.log(error));
 
->>>>>>> b249c11fd8a18a0d8dbfa733416a29d75c413316
         this.lists.push(newObj);
         this.update(this.lists, this.date);
       }
