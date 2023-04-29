@@ -88,20 +88,30 @@ exports.getAssignments = async (session, month, year) => {
 
   const USER_ID = userInfo.data.account.uid;
 
-  for (let event of Object.entries(eventData)) {
-    if (event.custom) {
-      calendar[dayOfMonth].push({
-        course_title: event.custom.title,
+  let calendar = {};
 
-        assignment_title: event.custom.title,
-        assignment_duetime: event.custom.duetime,
+  if (eventData[USER_ID]) {
+    for (let eventID of Object.keys(eventData[USER_ID])) {
+      const userEvent = eventData[USER_ID][eventID];
 
-        status: event.status,
-      });
+      if (userEvent.custom) {
+        let dayOfMonth = new Date(userEvent.custom.assignment_duetime * 1000).getDate();
+
+        if (!calendar[dayOfMonth]) calendar[dayOfMonth] = [];
+        calendar[dayOfMonth].push({
+          course_title: userEvent.custom.course_title,
+
+          assignment_id: eventID,
+          assignment_title: userEvent.custom.assignment_title,
+          assignment_duetime: userEvent.custom.assignment_duetime,
+
+          origin: "created",
+          status: userEvent.status,
+        });
+      }
     }
   }
 
-  let calendar = {};
   for (let c of courses) {
     let courseId = c.cv_cid;
     let assignments = await exports.getCourseAssignmentsOnTheMonth(session, courseId, month);
@@ -121,6 +131,7 @@ exports.getAssignments = async (session, month, year) => {
         assignment_title: assign.title,
         assignment_duetime: assign.duetime,
 
+        origin: "mcv",
         status:
           eventData[USER_ID] && eventData[USER_ID][ASSIGNMENT_ID]
             ? eventData[USER_ID][ASSIGNMENT_ID].status

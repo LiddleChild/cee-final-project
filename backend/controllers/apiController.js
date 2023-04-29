@@ -35,7 +35,7 @@ exports.postEvent = async (req, res, session) => {
   const user_id = userInfo.data.account.uid;
   const { event_id, status } = req.body;
 
-  const response = await dbModel.addItem(user_id, event_id, { status });
+  const response = await dbModel.updateItem(user_id, event_id, status);
   res.end(response);
 };
 
@@ -47,13 +47,10 @@ exports.postCreateEvent = async (req, res, session) => {
   const user_id = userInfo.data.account.uid;
   const { course_title, assignment_title, assignment_duetime } = req.body;
 
-  const response = await dbModel.addItem(user_id, uuidv4(), {
-    custom: {
-      course_title,
-      assignment_title,
-      assignment_duetime,
-    },
-    status: "NOT_DONE",
+  const response = await dbModel.addItem(user_id, uuidv4(), "NOT_DONE", {
+    course_title,
+    assignment_title,
+    assignment_duetime,
   });
   res.end(response);
 };
