@@ -1,5 +1,3 @@
-/** @format */
-
 const coursevilleModel = require("../models/coursevilleModel");
 const calendarModel = require("../models/calendarModel");
 const dbModel = require("../models/dbModel");
