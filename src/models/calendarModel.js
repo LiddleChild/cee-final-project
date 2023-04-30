@@ -1,7 +1,7 @@
 const axios = require("axios");
 
-const dbModel = require("../models/dbModel");
-const coursevilleModel = require("../models/coursevilleModel");
+const dbModel = require("./dbModel");
+const coursevilleModel = require("./coursevilleModel");
 
 const cacheUtil = require("../utils/cacheUtil");
 /*

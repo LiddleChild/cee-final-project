@@ -6,8 +6,9 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
 
-const apiRoute = require("./routes/apiRoute");
-const coursevilleRoute = require("./routes/coursevilleRoute");
+const staticRoute = require("./src/routes/staticRoute");
+const apiRoute = require("./src/routes/apiRoute");
+const coursevilleRoute = require("./src/routes/coursevilleRoute");
 
 // Middleware options
 const corsOptions = {
@@ -23,12 +24,14 @@ const sessionOption = {
 };
 
 // Middleware
+app.use("/", express.static("public"));
 app.use(cors(corsOptions));
 app.use(session(sessionOption));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
+app.use("/", staticRoute);
 app.use("/api", apiRoute);
 app.use("/courseville", coursevilleRoute);
 

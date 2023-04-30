@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const coursevilleController = require("./../controllers/coursevilleController");
+const coursevilleController = require("../controllers/coursevilleController");
 const authUtil = require("../utils/authUtil");
 
 router.get("/access_token", coursevilleController.accessToken);
