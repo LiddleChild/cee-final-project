@@ -1,4 +1,4 @@
-/** @format */
+const BACKEND_ADDRESS = "localhost:3000";
 
 class SideBar {
   constructor(elementLists, elementDate) {
@@ -83,7 +83,7 @@ class SideBar {
           markAsDoneBox.checked = checked;
           markAsDoneBox.onclick = function () {
             assign.status = assign.status == "NOT_DONE" ? "DONE" : "NOT_DONE";
-            fetch(`http://localhost:3000/api/event`, {
+            fetch(`http://${BACKEND_ADDRESS}/api/event`, {
               method: "POST",
               credentials: "include",
               headers: {
@@ -107,7 +107,7 @@ class SideBar {
             let index = this.lists.map((e) => e.assignment_id).indexOf(assign.assignment_id);
             if (index > -1) this.lists.splice(index, 1);
 
-            fetch(`http://localhost:3000/api/event`, {
+            fetch(`http://${BACKEND_ADDRESS}/api/event`, {
               method: "DELETE",
               credentials: "include",
               headers: {
@@ -125,7 +125,7 @@ class SideBar {
 
           assignmentItem.appendChild(assignmentItemTime);
           assignmentItem.appendChild(assignmentItemText);
-          if (assign.origin == "created") {
+          if (assign.origin === "created") {
             assignmentItem.appendChild(deleteEventBtn);
           }
           assignmentList.appendChild(assignmentItem);
@@ -209,7 +209,7 @@ class SideBar {
         newObj.assignment_duetime = Math.floor(d / 1000);
         newObj.status = "NOT_DONE";
 
-        fetch(`http://localhost:3000/api/create_event`, {
+        fetch(`http://${BACKEND_ADDRESS}/api/create_event`, {
           method: "POST",
           credentials: "include",
           headers: {

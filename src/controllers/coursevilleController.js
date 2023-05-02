@@ -5,12 +5,11 @@ const url = require("url");
 const querystring = require("querystring");
 const axios = require("axios");
 
-const REDIRECT_URI = `http://${process.env.BACKEND_ADDRESS}:${process.env.PORT}/courseville/access_token`;
+const REDIRECT_URI = `http://${process.env.IP_ADDRESS}:${process.env.PORT}/courseville/access_token`;
 const AUTHORIZATION_URL = `https://www.mycourseville.com/api/oauth/authorize?response_type=code&client_id=${process.env.CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
 const ACCESS_TOKEN_URL = "https://www.mycourseville.com/api/oauth/access_token";
 
 const coursevilleModel = require("../models/coursevilleModel");
-const authUtil = require("../utils/authUtil");
 
 /*
   ==================== login ====================
@@ -24,7 +23,7 @@ exports.login = (req, res) => {
  */
 exports.logout = (req, res) => {
   req.session.destroy();
-  res.redirect(`http://${process.env.FRONTEND_ADDRESS}/index.html`);
+  res.redirect(`http://${process.env.IP_ADDRESS}:${process.env.PORT}/index.html`);
 };
 
 /*
@@ -67,7 +66,7 @@ exports.accessToken = (req, res) => {
 
       if (token) {
         res.status(302);
-        res.location(`http://${process.env.FRONTEND_ADDRESS}/index.html`);
+        res.location(`http://${process.env.IP_ADDRESS}:${process.env.PORT}/index.html`);
         res.end();
       }
     })

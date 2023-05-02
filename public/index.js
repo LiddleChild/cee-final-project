@@ -3,8 +3,6 @@ let loginPanel = document.getElementsByClassName("login-panel")[0];
 let logoutPanel = document.getElementsByClassName("logout-panel")[0];
 let loadingScreen = document.getElementsByClassName("loading-screen")[0];
 //----------------------Variables------------------------
-const BACKEND_ADDRESS = "localhost:3000";
-
 let isLoggedIn = false;
 let userInfo;
 
@@ -40,7 +38,7 @@ calendar.setOnSelectingDay((e, day) => {
 
 //----------------------On JS Loaded------------------------
 // check for login session
-fetch("http://localhost:3000/courseville/get_user_info", {
+fetch(`http://${BACKEND_ADDRESS}/courseville/get_user_info`, {
   method: "GET",
   credentials: "include",
 })
@@ -67,7 +65,7 @@ function fetchData() {
     let year = date.getFullYear();
 
     const fetchOption = { method: "GET", credentials: "include" };
-    fetch(`http://localhost:3000/api/get_calendar?month=${month}&year=${year}`, fetchOption)
+    fetch(`http://${BACKEND_ADDRESS}/api/get_calendar?month=${month}&year=${year}`, fetchOption)
       .then((data) => data.json())
       .then((response) => {
         showLoadingScreen(false);
