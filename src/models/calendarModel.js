@@ -94,20 +94,23 @@ exports.getAssignments = async (session, month, year) => {
     for (let eventID of Object.keys(eventData[USER_ID])) {
       const userEvent = eventData[USER_ID][eventID];
 
-      if (userEvent.custom) {
-        let dayOfMonth = new Date(userEvent.custom.assignment_duetime * 1000).getDate();
+      if (userEvent.custom.assignment_duetime) {
+        let date = new Date(userEvent.custom.assignment_duetime * 1000);
+        let dayOfMonth = date.getDate();
 
-        if (!calendar[dayOfMonth]) calendar[dayOfMonth] = [];
-        calendar[dayOfMonth].push({
-          course_title: userEvent.custom.course_title,
+        if (date.getMonth() + 1 === month && date.getFullYear() === year) {
+          if (!calendar[dayOfMonth]) calendar[dayOfMonth] = [];
+          calendar[dayOfMonth].push({
+            course_title: userEvent.custom.course_title,
 
-          assignment_id: eventID,
-          assignment_title: userEvent.custom.assignment_title,
-          assignment_duetime: userEvent.custom.assignment_duetime,
+            assignment_id: eventID,
+            assignment_title: userEvent.custom.assignment_title,
+            assignment_duetime: userEvent.custom.assignment_duetime,
 
-          origin: "created",
-          status: userEvent.status,
-        });
+            origin: "created",
+            status: userEvent.status,
+          });
+        }
       }
     }
   }
